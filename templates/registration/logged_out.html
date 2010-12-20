@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}You're logged out. {% endblock%}
+{% block title %}{% endblock%}
+{% block primary %}
+
+{% if form.errors %}
+{{ message }}
+
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+<p class="p2"> You're logged out! </p>
+<p class="p1"> Thank you for helping the world become smarter today.</p>
+
+{% endblock %}

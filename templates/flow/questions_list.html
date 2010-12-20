@@ -1,0 +1,194 @@
+{% extends 'project_base.html' %}
+
+{% block p_content %}
+
+{% load markup %}
+{% load comments %}
+
+	{% if error_message %}
+		<p class="p3"><b>{{ error_message }}</b></p>
+	{% endif %}
+
+<p class="infotext comments">Project by: {{ project.owner.username }} Started on: {{ project.datecreated|date:"d.M.Y" }} -- <a href="/flow/question/{{project.id}}/">Add Question</a>
+</p>
+{% if project.collaborators_set.all %}
+	<p class="infotext">
+		Collaborators:{% for collabs in project.appliers_set.all %}{{ collabs.username }}, {% endfor %}
+	</p>
+{% endif %}
+
+{% if isCollaborator or isOwner %}
+
+	{% if isCollaborator %}
+		<p class="infotext"> You're a collaborator in this project</p>
+	{% endif %}
+	
+	{% if isOwner %}
+		{% if project.appliers_set.all %}
+			<p>hey, these people have applied to collaborate:
+				{% for collabs in project.appliers_set.all %}
+					<p>{{ collabs.username }}</p>
+				{% endfor %}
+			</p>		
+		{% endif %}
+	{% endif %}
+	
+{% else %}
+
+	{% if isApplier %}
+		<p class="p3">You have applied to join this project as a collaborator</p>
+ 	{% else %}
+
+		<div class="action-container">
+			<p class="p3"><a href="/flow/collaborate/{{project.id}}/">Apply to collaborate on this project</a></p>
+		</div> <!-- ends action-container -->
+
+	{% endif %}
+{% endif %}
+
+{% for gotQuestion in project.question_set.all %}
+
+<div class="question-container">
+        <table id="project-ul">
+        <tr class="QuestionTitleTR">
+        <td>
+            <div class="yellowblock">
+                &nbsp;
+            </div>
+        </td>
+        <td class=QuestionTitleTD>
+			<span class ="Qtitle readable">{{ gotQuestion.title  }}</span>	
+        </td>
+        </tr>
+        </table>
+    
+  </div> <!-- ends question-container -->
+
+<!-- The Answerbloc -->
+	
+	<!-- The Answerbloc is opened by pressing the question-container div, it includes:
+	 	1. The edit and delete buttons for the question
+		1. The explanation for the question
+		2. The button to open the answers
+		3. The answers with comments and the comment-form -->
+		
+		
+<div class="answerBlock">
+		{% if isCollaborator or isOwner %}
+			<a href="/flow/edit/{{project.id}}/{{gotQuestion.id}}/" class="actionButton">edit</a><a> </a>
+			<a href="/flow/delete/{{project.id}}/{{gotQuestion.id}}/" class="actionButton">delete</a>
+				{% for tag in project.tag_set.all %} - {{tag}}{% endfor %}
+		{% endif %}
+		
+	<div class="explanationBlock">
+	<!-- >{{ gotQuestion.explanation|markdown:"safe" }} -->
+    <table>
+    <ul>
+    <li class="explanationLI readable">
+        <div class="questionText">
+        <ul>
+            <li>
+                Q:
+            </li>
+            <li>
+            {{ gotQuestion.explanation|markdown:"safe" }}
+            </li>
+         </ul>
+         </div>
+            
+    </li>
+    </ul>
+    </table>
+	</div>
+	
+	<!--<a class="answerButton">See/Hide Answers </a> -->
+
+	<div class="answerNcomments">
+		{% for answer in gotQuestion.answer_set.all %} 
+	
+		<div class="answer readable">
+
+			A: {{answer.explanation|markdown:"safe"  }}
+
+			{% if isCollaborator or isOwner %}
+				<table>
+					<tr>
+						<td>
+							<div class="rightdown-container">
+								<a href="/flow/edit/{{project.id}}/{{gotQuestion.id}}/{{answer.id}}/" class="actionButton">edit</a>
+							</div>
+						</td>
+						<td>
+							<div class="rightdown-container">
+								<a href="/flow/delete/{{project.id}}/{{gotQuestion.id}}/{{answer.id}}/" class="actionButton">delete</a>
+							</div>
+						</td>
+					</tr>
+				</table>
+			{% endif %}
+
+		</div> <!-- ends the answer div -->
+
+<!-- The comment-container, commentButton, comment-container 1 and comment-container2 
+make up the Comments for each answer.--> 
+
+<!-- The comment-container holds the comments and the comment form. --> 
+
+{% get_comment_list for answer as ans_comment %}
+{% for com in ans_comment %}
+<div class="comment-container">
+		<table width="100%">
+			<tr>
+				<td rowspan="2" width="75%">	
+					{{ com.comment }}
+				</td>
+				<td align="right">
+					<table class="commenter-table">
+						<tr>
+							<td>
+								{{com.name}}, {{com.submit_date|date:"d.M.Y  f"}}
+							</td>
+						</tr>	
+						<tr>
+							<td>
+								<a href="{{com.url}}">{{com.url}}
+							</td>
+						</tr>
+					</table>
+					</tr>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				</td>
+			</tr>	
+		</table>
+		
+</div><!-- ends the comment-container --> 
+
+{% endfor %} <!-- endfor for comments --> 
+
+<a class="btn-slide">Add Comment</a>
+<div class ="comment-form">
+{% render_comment_form for answer %}
+</div><!-- ends the comment-form div -->
+
+{% endfor %} <!-- ends endfor for answers in questions --> 
+
+{% if isCollaborator or isOwner %}
+
+<a href="/flow/answer/{{project.id}}/{{gotQuestion.id}}/" class="actionButton">add answer</a>
+
+{% endif %}
+
+</div><!-- ends the answerNcomments -->
+
+</div> <!-- ends the answerBlock div --> 
+{% endfor %}
+
+{% if isCollaborator or isOwner %}
+<a href="/flow/question/{{project.id}}/" class="actionButton">Add Question</a>
+{% endif %}
+
+{% endblock %}
+

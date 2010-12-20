@@ -1,0 +1,115 @@
+$(document).ready(function() {
+  $('div.comment-around> div').hide();  
+  $('div.comment-around> div').click(function() {
+    var $nextDiv = $(this).next();
+    var $visibleSiblings = $nextDiv.siblings('div:visible');
+ 
+    if ($visibleSiblings.length ) {
+      $visibleSiblings.slideUp('fast', function() {
+        $nextDiv.slideToggle('fast');
+      });
+    } else {
+       $nextDiv.slideToggle('fast');
+    }
+  });
+});
+
+
+animatedcollapse.addDiv('comment-form', 'fade=1')
+animatedcollapse.addDiv('jason', 'fade=1,height=80px')
+
+animatedcollapse.ontoggle=function($, divobj, state){ //fires each time a DIV is expanded/contracted
+	//$: Access to jQuery
+	//divobj: DOM reference to DIV being expanded/ collapsed. Use "divobj.id" to get its ID
+	//state: "block" or "none", depending on state
+    
+    
+}
+
+animatedcollapse.init()
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTMLk Writer">
+  <meta name="CocoaVersion" content="949.46">
+    <link rel="stylesheet" href="/site_media/style.css" type="text/css" /> 
+  <script type="text/javascript" src="/site_media/markitup/markitup/sets/markdown/set.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="/site_media/animatedcollapse.js">
+
+/***********************************************
+* Animated Collapsible DIV v2.4- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for this script and 100s more
+***********************************************/
+
+</script>
+<script type="text/javascript">
+
+$(document).ready(function() {
+  $('div.comment-around> div').hide();  
+  $('div.comment-around> div').click(function() {
+    var $nextDiv = $(this).next();
+    var $visibleSiblings = $nextDiv.siblings('div:visible');
+ 
+    if ($visibleSiblings.length ) {
+      $visibleSiblings.slideUp('fast', function() {
+        $nextDiv.slideToggle('fast');
+      });
+    } else {
+       $nextDiv.slideToggle('fast');
+    }
+  });
+});
+
+
+</script>
+
+</head>
+
+<script type="text/javascript" src="/site_media/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/site_media/markitup/markitup/jquery.markitup.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="/site_media/markitup/markitup/skins/markitup/style.css" />
+<link rel="stylesheet" type="text/css" href="/site_media/markitup/markitup/sets/markdown/style.css" />
+
+<div class="login">
+{% if user.is_authenticated %}
+    <a href="/accounts/logout/">logout</a>
+{% else %}
+    <a href="/accounts/login/"> login </a> 
+    <p>&nbsp;&nbsp;</p>
+    <a href="/flow/register/"> register or </a></p>
+{% endif %}
+</div>
+<div class="header"><a href="/">Learness</a></div>
+<body>
+
+
+        {% block navigation %}{% endblock %}
+        <div id="leftcol">&nbsp;</div>
+        <div id="rightcol">&nbsp;</div>
+        <div id="content">
+				<p class="p1">
+                {% block title %}
+                {% endblock %}</p>
+                {% comment %} {% autoescape off %} {% endcomment %}
+				{% block primary %}{% endblock %}
+                {% comment %} {% endautoescape %} {% endcomment %}
+			
+            </div>
+            
+			<div id="secondary"></div>
+				
+
+</body>
+</html>
+
+

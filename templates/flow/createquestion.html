@@ -1,0 +1,35 @@
+{% extends 'project_base.html' %}
+{% load markup %}
+{% block p_content %}
+
+
+<p class="p2">{{ url_project.name }}</p>
+<form action="." method = "POST">
+<p>
+<table>
+<tr><th>Title:</th><td>{{ form.title}}</td><td></td></tr>
+<tr><th>Explanation:</th>
+
+<td>
+
+{{ form.explanation }}
+
+</td>
+
+{% comment %} This was for the CKeditor {% endcomment %}
+{% comment %} <script type="text/javascript">{% endcomment %}
+{% comment %}	CKEDITOR.replace( "explanation" );{% endcomment %}
+{% comment %}</script>{% endcomment %}
+<td>
+	<div class="wmd-preview"></div>
+</td>
+</tr>
+
+<tr><th>Tags:</th><td>{{ form.tags }}</td><td></td></tr>
+
+</table>
+<p><input type="submit" value="Submit"></p>
+</form>
+<div class="wmd-preview"></div>
+
+{% endblock %}

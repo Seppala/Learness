@@ -1,0 +1,28 @@
+            	
+{% extends 'base.html' %}
+
+{% block primary %}
+
+<div class="action-container">
+<a class="a1" href="/flow/project/">Add Project</a>
+</div>
+
+<div id="project-header">All Projects:</div>
+
+{% if project_list %}
+    <ul id="project-ul">
+	{% for project in project_list %}
+    <li>
+	<a href= "/flow/{{ project.id }}/">
+			{{ project.name }}
+	</a>
+    </li>
+	{% endfor %}
+    </ul>
+{% else %}
+	<p class="p2">No projects are available.</p>
+{% endif %}
+
+
+{% endblock %}
+</html>

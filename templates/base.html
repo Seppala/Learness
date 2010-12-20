@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Josefin+Sans+Std+Light&subset=latin' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans&subset=latin' rel='stylesheet' type='text/css'>
+	
+  
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTMLk Writer">
+  <meta name="CocoaVersion" content="949.46">
+    <link rel="stylesheet" href="/site_media/style.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="/site_media/markitup/markitup/skins/markitup/style.css" />
+	<link rel="stylesheet" type="text/css" href="/site_media/markitup/markitup/sets/markdown/style.css" />
+	
+<script type="text/javascript" src="/site_media/jquery-1.4.js"></script> 
+<script type="text/javascript" src="/site_media/markitup/markitup/jquery.markitup.js"></script>
+<script type="text/javascript" src="/site_media/markitup/markitup/sets/markdown/set.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	
+	$(".comment-form").hide();
+	
+	$(".btn-slide").click(function(){
+		$(this).next(".comment-form").slideToggle("slow");
+		return false;
+	})
+	
+
+	$(".comment-container .comment-container1").hide();
+
+	$(".comment-container .commentButton").click(function(){
+		$(this).next(".comment-container1").slideToggle("slow");
+		return false;
+	})
+	
+
+	$(".answerBlock").hide();
+
+	$(".question-container").click(function(){
+		$(this).next("div").slideToggle("slow");
+		return false;
+	})
+
+	<!--$(".answerNcomments").hide();
+
+	$(".answerButton").click(function(){
+		$(this).next(".answerNcomments").slideToggle("slow");
+		return false;
+	})
+})
+
+</script>
+
+<script type="text/javascript" src="/site_media/tiny_mce/tiny_mce.js"></script>
+
+<!-- <script type="text/javascript">
+tinyMCE.init({
+	mode : "textareas",
+	theme : "advanced",
+	width : "200",
+	//extended_valid_elements : "img[class=myclass|!src|border:0|alt|title|width|height]"
+	
+});
+</script> -->
+
+</head>
+<body>
+<div id="container">
+<div id="head">
+<div id="header"><a href="/">Learness</a></div>
+<div class="login">
+	<ul>
+{% if user.is_authenticated %}
+    <li>
+		<a href="/accounts/logout/">logout</a>
+	</li>
+{% else %}
+	<li>
+     	<a href="/flow/register/">register</a>
+	</li>
+	<li>
+		or
+	</li>	
+    <li>
+		<a href="/accounts/login/">login</a>
+    
+	</li>
+{% endif %}
+</ul>
+</div>
+</div>
+
+
+        
+        <div id="leftcol">{% block navigation %}{% endblock %}</div>
+        <div id="rightcol">&nbsp;</div>
+        <div id="content">
+				<h1>
+                {% block title %}
+                {% endblock %}</h1>
+                {% comment %} {% autoescape off %} {% endcomment %}
+				{% block primary %}{% endblock %}
+                {% comment %} {% endautoescape %} {% endcomment %}
+			
+          </div>
+            
+			<div id="secondary"></div>
+				
+<script type="text/javascript" src="/site_media/wmd/wmd.js"></script>
+</div>
+</body>
+</html>
+
+

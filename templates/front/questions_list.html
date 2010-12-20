@@ -1,0 +1,62 @@
+{% extends 'project_base_front.html' %}
+{% block p_content %}
+
+{% load markup %}
+
+{% if error_message %}
+<p class="p3"><b>{{ error_message }}</b></p>
+{% endif %}
+
+{% if project.question_set %}
+
+{% for gotQuestion in project.question_set.all %}
+<div id="questionBlock">
+{% comment %}{% endcomment %}
+<div class="question-container">
+<a name="{{gotQuestion.id}}" href="/front/{{project.id}}/{{gotQuestion.id}}/#{{gotQuestion.id}}">
+<p class="p2">{{ gotQuestion.title  }}</p>
+</a>
+</div>
+
+
+<p>{% for tag in gotQuestion_set.all %} - {{tag}}{% endfor %}</p>
+
+
+{% if gotQuestion.id %}
+{% ifequal question.id gotQuestion.id %}
+<div id="answerBlock">
+<p class="p3">{{ gotQuestion.explanation|markdown:"safe" }}</p>
+
+<p class="p2">Answers:</p>
+<p class="p3">
+
+
+{% for answer in gotQuestion.answer_set.all %} 
+<div id="answer">
+
+{{answer.explanation|markdown:"safe" }}
+
+
+</div> {% comment %} ends the answer div {% endcomment%}
+
+{% for tag in answer.get_tags %} - {{tag}}{% endfor %}
+
+
+{% endfor %}
+
+
+{% endifequal %}
+
+
+{% endif %}
+
+{% endfor %}
+
+
+{% else %}
+
+No questions yet!
+{% endif %}
+
+{% endblock %}
+

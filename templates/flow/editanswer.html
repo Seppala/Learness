@@ -1,0 +1,31 @@
+{% extends 'project_base.html' %}
+{% load markup %}
+
+{% block p_content %}
+
+<!-- <script type="text/javascript" >
+   $(document).ready(function() {
+      $("#id_explanation").markItUp(mySettings);
+   });
+</script> -->
+
+<table>
+	<tr>
+		<td>Question Title: </td><td> {{ url_question.title}}</td>
+	</tr>
+	<tr>
+		<td>Explanation: </td><td> {{ url_question.explanation}}</td>
+	</tr>
+	<tr>
+		<td>Answer: </td><td> {{ url_answer.explanation}}</td>
+	</tr>
+<form action="." method = "POST">
+
+    <tr valign="top"><td>Edit answer: </td><td>{{ form.explanation}}</td></tr>
+    <tr><td>Tags: </td><td>{{ form.tags }}</td></tr>
+    
+
+</table>
+<tr><th>&nbsp;</th><td><input type="submit" value="save"></td></tr>
+</form>
+{% endblock %}

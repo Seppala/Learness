@@ -1,0 +1,577 @@
+/*GENERAL*/
+
+a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 32px; color: rgb(2,90,191)}
+a.a1:hover { color:rgb(242,45,27);}
+ 
+h1 a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 32px; color: rgb(2,90,191)}
+
+table {
+font-family: 'Josefin Sans Std Light', arial, serif;
+}
+a {
+font-family: 'Josefin Sans Std Light', arial, serif;
+}
+body {
+font-family: 'Josefin Sans Std Light', arial, serif;
+}
+input {
+font-family: 'Josefin Sans Std Light', arial, serif;
+}
+li {
+font-family: 'Josefin Sans Std Light', arial, serif;
+list-style-type: none;
+}
+
+p {
+font-family: 'PT Sans', arial, serif;
+margin:0px;
+}
+
+ul {
+
+margin: 0px;
+}
+
+    
+
+/*
+
+PROJECT
+
+*/
+.yellowblock {
+
+    background: rgb(244,233,30);
+}
+
+.QuestionTitleTD {
+
+padding: 10px 0px 0px 10px;
+
+}
+
+.readable {
+
+    font-family: 'PT Sans', arial, serif; 
+    font-size: 16px;
+    letter-spacing: 1.2px;
+    line-height:20px;
+    color: rgb(0,0,0);
+    word-spacing: 3px;
+
+}
+
+.comments {
+
+font-family: 'Josefin Sans Std Light', arial, serif;
+font-size: 14px;
+color: rgb(15,15,15);
+
+}
+
+.infotext {
+
+}
+
+
+#project-ul li{
+
+    list-style-type:none; 
+    margin-top:6px;   
+
+}
+
+
+/*questionBlock and question-container is the question and project box*/
+
+#questionBlock {
+
+display: block;
+line-height: 20px;
+background: #fff;
+letter-spacing: 1.7px;
+padding-left: 0px;
+border-style:solid;
+border-width:0px;
+}
+
+/*Qtitle is the class of the span where the question title is.*/
+
+.Qtitle {
+    
+    color: blue;
+
+}
+
+.questionText ul{
+    
+    display: inline;
+
+}
+
+.questionText ul li{
+    
+    display: inline;
+
+}
+
+/*Project-header is for the Projects */
+#project-header {
+	font-size: 48px;
+	display: block;
+	line-height: 24px;
+	letter-spacing: 1.7px;
+	margin-top:32px;
+    margin-bottom:5px;
+    margin-left:1px;
+	text-decoration: none;
+		}
+
+/*Project-container is for the listing on the first page with all the projects*/
+.project-container {
+		color: #0000CC;
+		font-size: 24px;
+		display: block;
+		line-height: 130%;
+		background: #E8E8E8;
+		letter-spacing: 1.7px;
+		margin-top:2px;
+	    margin-left:1px;
+		padding-left: 5px;
+		padding-top: 5px;
+		border-style:solid;
+		border-width:0px;
+		text-decoration: none;
+		}
+
+.project-container:hover {
+		background: #C8C8C8;
+	    text-decoration: none;
+        }
+
+/* answerButton is the button that opens the answer div */
+
+a.answerButton {
+    background: fff;
+    text-align: left;
+    font-size: 14px; 
+    /*height: 20px;*/
+    margin-top:0px;
+    /*margin-left:1px;*/
+    padding-top: 1px;
+    padding-left: 1px;
+}
+
+a.answerButton:hover{
+    /*background: #6666FF;*/
+}
+
+
+/* comment-container is for the comments*/
+
+.comment-container {
+    display: block;
+    background: #fff;
+    text-align: left;
+    margin-left: 20%;
+    padding-top: 0px;
+    padding-left: 0px;
+    color: #000000;
+    text-decoration: none;
+    border-bottom-style:dotted;
+    border-width: 1px;
+        }
+                
+/* commentButton is for the button that opens the comments*/
+
+a.commentButton {
+    background: fff;
+    text-align: left;
+    font: 0.7em Times; 
+    color: #0000FF;
+    /*height: 20px;*/
+    margin-top:5px;
+    margin-left:5px;
+    padding-top: 2px;
+    padding-left: 2px;
+    text-decoration:none;
+}
+
+a.commentButton:hover{
+   /* background: #6666FF;
+    color: #000000;*/
+    text-decoration: underline;
+}
+
+/* actionButton is for the edit and delete buttons*/
+
+a.actionButton {
+    background: fff;
+    text-align: left;
+    /*height: 20px;*/
+    margin-top:1px;
+    /*margin-left:1px;*/
+    padding-top: 1px;
+    padding-left: 1px;
+}
+
+a.actionButton:hover{
+   /* background: #6666FF;
+    color: #000000;*/
+}
+
+
+/* Comment-form is for the comment form */
+
+.comment-form {
+    /*display: none; */
+    background: #fff;
+    text-align: left;
+    margin-left: 50px;
+    padding-top: 0px;
+    padding-left: 0px;
+    color: #000000;
+    text-decoration: none;
+        }
+        
+.comment-form p:hover {
+    background: #E8E8E8;
+    color: #000000;
+    text-decoration: none;
+    display:none;
+        }  
+a.addQuestion {
+
+}
+
+a.addQuestion:hover {
+
+}
+
+/* The addComment class is for the comment form */
+.addComment {
+    background: #fff;
+    text-align: left;
+    margin-top:2px;
+    margin-left: 50px;
+    padding-top: 1px;
+    padding-left: 20px;
+    color: #000000;
+    text-decoration: none;
+        }
+/* The btn-slide is for the "Comment" Button to make the form slide out. */
+
+a.btn-slide {
+    background: fff;
+    text-align: left;
+    fontsize: 12px;
+    /*height: 20px;*/
+    margin-top:1px;
+    margin-left:1px;
+    padding-top: 1px;
+    padding-left: 1px;
+}
+
+a.btn-slide:hover{
+    /*background: #6666FF;
+    color: #000000;*/
+    text-decoration: underline;
+}
+
+/* answerNcomments is the placeholder div for answers and the comment for the answers. */
+
+.answerNcomments {
+    display: block;
+    background: #fff;
+    text-align: left;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-left: 0px;
+    color: #000000;
+    text-decoration: none;
+        }
+/*the commenter-table is a table that holds the information about who has given the comment*/
+
+.commenter-table {
+	font: 0.7em Times; 
+	color: #b8b8b8;
+}
+
+/*explanationLI is the li which holds the explanation of a question.
+*/
+
+.explanationLI {
+
+    padding: 10px 0px 5px 10px;
+}
+
+/* explanationBlock is the placeholder div for the explanation of the question */
+
+.explanationBlock {
+    display: block;
+    background: #fff;
+    text-align: left;
+    margin-left: 0px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    color: #000000;
+    text-decoration: none;
+    font-family:'PT Sans', arial;
+        }
+.explanationBlock li a p{
+
+font-family:'PT Sans', arial;
+
+}
+        
+.action-container a {
+    display: block;
+    float:right;
+    height:30px;
+    width:80px;
+    line-height:30px;
+    color: rgb(0,0,0);
+	font:28px; 
+    font-family: 'Cuprum', arial, serif;
+    text-align: center;
+    padding: 1px;
+    text-decoration: none;
+    background: rgb(244,233,30);
+    border-bottom: 1px solid #DAA520;
+    border-right: 1px solid #DAA520;
+    border-top: 1px solid #FFF68F; 
+    border-left: 1px solid #FFF68F; 
+
+        }
+
+        
+/* rightdown-container is the box for the 'edit', 'delete',
+buttons inside the question box (link-container)*/        
+        
+.rightdown-container a {
+    display: block;
+    clear:both;
+    float: right;
+    background: #f0f0f0;
+    /*height:24px;*/
+    text-align: left;
+    padding-top: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    color: #0000ff;
+	font: 0.9em;
+    text-decoration: none;
+    border-style:dotted;
+    border-width:0px;
+        }
+
+.rightdown-container a:hover {
+    text-decoration: underline;
+        }  
+
+  /*     
+body { 
+  background: url('/site_media/textTile.png') 0;
+  background-repeat:repeat-y;
+  
+}
+*/
+
+#clear {
+    display: block;
+    clear:both;
+    float: right;
+    background: #D0D0D0;
+    height:24px;
+    text-align: left;
+    padding-top: 6px;
+    padding-left: 4px;
+    padding-right: 4px;
+    color: #000000;
+    text-decoration: none;
+        }
+
+div#header a{
+padding-left:10px;
+padding-bottom: 10px;
+padding-bottom: 10px;
+padding-top: 10px;
+margin-bottom: 5px;
+background: #fff;
+color: rgb(244,233,30);
+text-decoration: none;
+font-size: 44px;
+font-family: Cuprum, Verdana;
+}
+
+.answerBlock
+{
+display: block;
+line-height: 100%;
+letter-spacing: 1.7px;
+/* padding-left: 15px; */
+padding-bottom: 2px;
+border-style:solid;
+border-width:0px;
+font-family: 'PT Sans', arial;
+
+}
+
+.answerBlock:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibity: hidden;
+}
+
+.answer
+{
+display: block;
+background: #F0F0F0;
+margin-top: 10px;
+padding:3px 10px 15px 10px;
+text-align:justify;
+margin: 0px;
+border-style:solid;
+border-width:0px;
+}
+
+.answer p {
+
+padding: 15px 0px 2px 25px;
+
+}
+
+/* Show empty cells */
+table { empty-cells:show; }
+
+
+
+/*
+#question {
+  padding:10px;
+  border:0px solid gray;
+  background: #F8F8F8;
+  top: 0px;
+  left: 0px;
+  }
+  */
+/*  
+  
+#body {
+  margin: 0px;
+  padding: 0px;
+}
+#header {
+  background: #fff;
+  
+  width: 100%;
+}
+*/
+#leftcol {
+    float: left;
+    border-style:solid;
+    border-width:0px;
+    width: 20%;
+ }   
+  
+   /*
+     background: url('site_media/textTile.png') 20% 0;
+  */
+  /*
+  background: #ccc url(/site_media/textTile.png) repeat-y 50% 0;
+  flot: left;
+  */
+  /*
+  background-image:url('/site_media/textTile.png');
+  background-repeat:repeat-y;
+  float: left;
+  */
+  
+#rightcol {
+  background: url('/site_media/whiteTile.png');
+  float: right;
+  background-repeat: repeat-y;
+}
+
+#content {
+  background: #fff;
+  float: left;
+  border-style:solid;
+  border-width:0px;
+  width: 680px;
+
+}
+
+/* Navigation for the upper navigation*/
+
+.navigation a {
+    display: block;
+    background: #fff;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #fff;
+    font-weight:bold;
+    height:5%;
+    width: 100%;
+    text-align: center;
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    margin: 1px;
+    color: #663366;
+    text-decoration: none;
+    
+        }
+
+.navigation a:hover {
+    background: #f0f0f0;
+    color: #663366;
+    text-decoration: none;
+        }  
+
+.login ul{
+    float: right;
+    list-style-type:none;
+    text-decoration: none;
+    padding: 0px;
+}
+
+div#container {
+    width:90%;
+    margin-right:auto;
+    margin-left:auto;
+    height:auto;
+    position:relative;
+}
+
+.login {
+    position:absolute;
+    top:2px;
+    right:2px;
+}
+
+.login li{
+    display: inline;
+}
+
+.login a:hover {
+    color: #6633cc;
+}
+
+.login p {
+    float: right;
+    text-decoration: none;
+    font: 0.7em Times;
+}
+
+
+#footer {
+  background: #0f0;
+  clear: both;
+  width: 100%;
+}
+

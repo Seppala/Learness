@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+
+{% block primary %}
+
+<body>
+{% if projects %}
+{% for project in projects %}
+
+<div class="question-container">
+<p class="p2"><a href= "/flow/{{ project.id }}/">{{ project.name }}</a></p>
+
+{% comment %}<td><a href= "/flow/delete/{{ project.id }}/"><p class="p5">delete</p></a>{% endcomment %}
+
+</div>
+{% endfor %}
+
+<p class="p1">{% else %}</p>
+<p class="p2">No projects are available.</p>
+<p class="p1">{% endif %}</p>
+</body>
+
+
+{% endblock %}
+</html>

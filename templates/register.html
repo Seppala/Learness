@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block pagetitle %}Register{% endblock%}
+{% block title %}{% endblock%}
+{% block primary %}
+
+<form action="." method = "POST">
+{{ form.as_p }}
+<p><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

@@ -1,0 +1,6 @@
+New Registration!
+
+You've registered for Learness and can start pumping some brain iron!
+
+Username: {{ username }}
+password: {{ password }}

@@ -1,0 +1,16 @@
+
+{% extends 'project_base.html' %}
+{% block p_content %}
+{% if error_message %}
+<p class="p3"><b>eiks tää näy?{{ error_message }}</b></p>
+{% endif %}
+{% for question in project.question_set.all %} 
+
+<div class="link-container><p class="p2"><a href="/flow/{{project.id}}/{{question.id}}/#{{question.id}}">{{ question.title }}</a></p></div>
+{% endfor %}
+</body>
+
+<p class="p2"><a href="/flow/question/{{project.id}}/">Add Question</a></p>
+
+{% endblock %}
+

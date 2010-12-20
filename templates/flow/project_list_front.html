@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+
+{% block primary %}
+
+
+<body>
+<p class = "p6">Learn with others and document your learning. </p>
+<p class ="frontText">Learn faster and remember what you've learnt.</p>
+
+<p class ="frontText2">
+Register <b>or</b>
+Start learning by reading the learning paths that have already been started below:
+</p>
+
+
+{% if project_list %}
+{% for project in project_list %}
+
+<div class="question-container">
+<p class="p2"><a href= "/front/{{ project.id }}/">{{ project.name }}</a></p>
+
+{% comment %}<td><a href= "/flow/delete/{{ project.id }}/"><p class="p5">delete</p></a>{% endcomment %}
+
+</div>
+{% endfor %}
+
+<p class="p1">{% else %}</p>
+<p class="p2">No projects are available.</p>
+<p class="p1">{% endif %}</p>
+</body>
+
+
+{% endblock %}
+</html>

@@ -1,0 +1,7 @@
+New Registration!
+
+Firstname: {{ first_name }}
+Lastname: {{ last_name }}
+Username: {{ username }}
+email: {{ email }}
+pk: {{ pk }}

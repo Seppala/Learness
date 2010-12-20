@@ -1,0 +1,32 @@
+Primary Authors:
+
+    * Daniel Lindsley
+    * Matt Croydon (some documentation, sanity checks and the sweet name)
+    * Travis Cline (the original SQ implementation)
+
+
+Thanks to
+    * Jacob Kaplan-Moss & Joseph Kocherhans for the original implementation of
+      djangosearch, of which portions were used, as well as basic API feedback.
+    * Christian Metts for designing the logo and building a better site.
+    * Nathan Borror for testing and advanced form usage.
+    * Malcolm Tredinnick for API feedback.
+    * Mediaphormedia for funding the development on More Like This and faceting.
+    * Travis Cline for API feedback, Git help and improvements to the reindex command.
+    * Brian Rosner for various patches.
+    * Richard Boulton for feedback and suggestions.
+    * Cyberdelia for feedback and patches.
+    * Jannis Leidel for patching the setup.py.
+    * Ask Solem for for patching the setup.py.
+    * Ben Spaulding for feedback and documentation patches.
+    * smulloni for various patches.
+    * JoeGermuska for various patches.
+    * SmileyChris for various patches.
+    * sk1p for various patches.
+    * David Sauve (notanumber) for the Xapian backend and various patches.
+    * ryszard for various patches.
+    * Patryk Zawadzki (patrys) for various patches and feedback.
+    * Frank Wiles for documentation patches.
+    * Chris Adams (acdha) for various patches.
+    * Kyle MacFarlane for various patches.
+    * Alex Gaynor (alex) for help with handling deferred models with More Like This.
