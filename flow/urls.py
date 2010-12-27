@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 from django.contrib.auth.views import *
 from django.views.generic import list_detail
 from django.contrib.auth.decorators import login_required
-from learness3.flow.models import Project, Question
+from Learness.flow.models import Project, Question
 
 info_dict = {
     'queryset': Project.objects.all(),
@@ -14,13 +14,13 @@ urlpatterns = patterns('',
 	
 	#Working generic view for the project list page
 	#(r'^$', login_required(list_detail.object_list), info_dict),
-	(r'^$', 'learness3.flow.views.projects_user'),
+	(r'^$', 'Learness.flow.views.projects_user'),
 	
     #(r'^(?P<project_id>\d+)/$', 'question_list'),
     #(r'^(?P<object_id>\d+)/$', 'django.views.generic.list_detail.object_detail', info_dict),
     	)
 	
-urlpatterns += patterns('learness3.flow.views',
+urlpatterns += patterns('Learness.flow.views',
 	(r'^register/$', 'register'),
 	(r'^(?P<project_id>\d+)/$', 'question_list'),
     (r'^(?P<project_id>\d+)/(?P<question_id>\d+)/$', 'question_list'), 
@@ -37,6 +37,6 @@ urlpatterns += patterns('learness3.flow.views',
   
          
     #url(r'^(?P<object_id>\d+)/results/$', 'django.views.generic.list_detail.object_detail', dict(info_dict, template_name='polls/results.html'), 'poll_results'),
-    #(r'^(?P<poll_id>\d+)/vote/$', 'learness3.polls.views.vote'),
+    #(r'^(?P<poll_id>\d+)/vote/$', 'Learness.polls.views.vote'),
 
 )

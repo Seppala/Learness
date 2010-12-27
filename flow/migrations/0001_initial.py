@@ -1,7 +1,7 @@
 
 from south.db import db
 from django.db import models
-from learness3.flow.models import *
+from Learness.flow.models import *
 
 class Migration:
     

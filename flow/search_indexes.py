@@ -1,7 +1,7 @@
 import datetime
 from haystack import indexes
 from haystack import site
-from learness3.flow.models import Project, Question, Answer, Comment, Link
+from Learness.flow.models import Project, Question, Answer, Comment, Link
 
 
 class QuestionIndex(indexes.SearchIndex):

@@ -1,4 +1,4 @@
-from learness3.flow.models import User, Project, Question, Answer, Comment, Link
+from Learness.flow.models import User, Project, Question, Answer, Comment, Link
 from django.contrib import admin
 
 #admin.site.register(User)

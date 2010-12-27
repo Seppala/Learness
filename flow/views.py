@@ -8,8 +8,8 @@ from django.template import RequestContext
 from django.utils.safestring import mark_safe
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render_to_response, get_object_or_404
-from learness3.flow.models import Project, Question, Answer
-from learness3.flow.CustomHtmlFilter import *
+from Learness.flow.models import Project, Question, Answer
+from Learness.flow.CustomHtmlFilter import *
 from forms import ProjectForm, QuestionForm, AnswerForm, LongUserCreationForm
 from django.views.generic import list_detail
 
