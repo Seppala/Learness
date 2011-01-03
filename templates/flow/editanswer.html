@@ -19,7 +19,7 @@
 	<tr>
 		<td>Answer: </td><td> {{ url_answer.explanation}}</td>
 	</tr>
-<form action="." method = "POST">
+<form action="." method = "POST">{% csrf_token %}
 
     <tr valign="top"><td>Edit answer: </td><td>{{ form.explanation}}</td></tr>
     <tr><td>Tags: </td><td>{{ form.tags }}</td></tr>

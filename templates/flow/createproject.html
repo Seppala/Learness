@@ -3,7 +3,7 @@
 {% block pagetitle %}New Project{% endblock%}
 {% block title %}Define your project{% endblock%}
 {% block primary %}
-<form action="." method = "POST">
+<form action="." method = "POST">{% csrf_token %}
 <table>
     <tr><th>Give a name for your project:</th><td>{{ form.name }}</td></tr>
     <tr><th></th><td></td></tr>

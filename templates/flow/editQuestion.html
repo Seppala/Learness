@@ -11,7 +11,7 @@
    });
 </script> -->
 
-<form action="." method = "POST">
+<form action="." method = "POST">{% csrf_token %}
 <p>
 <table>
 <tr><th>Title:</th><td>{{ form.title }}</td></tr>

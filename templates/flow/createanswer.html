@@ -15,7 +15,7 @@
 <p>
 {{ url_question.explanation|markdown:"safe" }}
 </p>
-<form action="." method = "POST">
+<form action="." method = "POST">{% csrf_token %}
 <table>
     <tr><th colspan=2 align=left>Your Answer:</th><td></td><td></td></tr>
     <tr><th></th><td>{{ form.explanation }}</td><td></td></tr>

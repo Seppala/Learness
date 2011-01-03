@@ -4,7 +4,7 @@
 
 
 <p class="p2">{{ url_project.name }}</p>
-<form action="." method = "POST">
+<form action="." method = "POST">{% csrf_token %}
 <p>
 <table>
 <tr><th>Title:</th><td>{{ form.title}}</td><td></td></tr>
