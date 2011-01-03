@@ -1,7 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
-from tagging.fields import TagField
-from tagging.models import Tag
+#from tagging.fields import TagField
+#from tagging.models import Tag
 from django.contrib.auth.models import User
 
 # Create your models here.
