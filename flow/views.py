@@ -15,10 +15,10 @@ from django.views.generic import list_detail
 
 @login_required
 def limited_object_list(request):
-	return object_list(request, 
+	return object_list(context_instance=RequestContext(request, 
 	queryset = Project.objects.all(), 
 	#'template_object_name' : 'project',
-	)
+	))
 
 #For starting page wrapper	
 def projects_user(request):
