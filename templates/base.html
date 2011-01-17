@@ -15,6 +15,8 @@
 	<link rel="stylesheet" type="text/css" href="/site_media/markitup/markitup/skins/markitup/style.css" />
 	<link rel="stylesheet" type="text/css" href="/site_media/markitup/markitup/sets/markdown/style.css" />
 	
+<script type="text/javascript" src="http://static.wehearvoices.net/widget.js"></script>
+<script type="text/javascript" src="http://widget.wehearvoices.net/node/init.js?user_id=f50fb6ae-2192-11e0-b83c-fefdb24f91c5"></script>
 <script type="text/javascript" src="/site_media/jquery-1.4.js"></script> 
 <script type="text/javascript" src="/site_media/markitup/markitup/jquery.markitup.js"></script>
 <script type="text/javascript" src="/site_media/markitup/markitup/sets/markdown/set.js"></script>
@@ -25,7 +27,7 @@ $(document).ready(function(){
 	
 	$(".comment-form").hide();
 	
-	$(".btn-slide").click(function(){
+	$(".add-comment").click(function(){
 		$(this).next(".comment-form").slideToggle("slow");
 		return false;
 	})
@@ -70,9 +72,8 @@ tinyMCE.init({
 
 </head>
 <body>
-<div id="container">
 <div id="head">
-<div id="header"><a href="/">Learness</a></div>
+
 <div class="login">
 	<ul>
 {% if user.is_authenticated %}
@@ -95,9 +96,14 @@ tinyMCE.init({
 </div>
 </div>
 
-
+<div id="leftline">
+<div id="header"><a href="/">Learness</a></div>
+{% block navigation %}{% endblock %}
+</div>
+<div id="rightline"></div>
+<div id="middle">
         
-        <div id="leftcol">{% block navigation %}{% endblock %}</div>
+        <div id="leftcol"></div>
         <div id="rightcol">&nbsp;</div>
         <div id="content">
 				<h1>
@@ -113,6 +119,7 @@ tinyMCE.init({
 				
 <script type="text/javascript" src="/site_media/wmd/wmd.js"></script>
 </div>
+<div id="footer"><div>
 </body>
 </html>
 

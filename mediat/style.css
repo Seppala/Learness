@@ -1,25 +1,33 @@
-/*GENERAL*/
+/*Contents
 
-a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 32px; color: rgb(2,90,191)}
-a.a1:hover { color:rgb(242,45,27);}
- 
-h1 a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 32px; color: rgb(2,90,191)}
+1. General - default styling of elements
+2. Template
+3. Project page
+4. Question list for projects
+4. 
 
-table {
-font-family: 'Josefin Sans Std Light', arial, serif;
+
+/* 1. GENERAL*/
+
+#project-ul .Qtitle {
+font-family: Arial;
 }
+
 a {
-font-family: 'Josefin Sans Std Light', arial, serif;
+font-family: Verdana, arial, serif;
+text-decoration:none;
+
 }
-body {
+h1 {
 font-family: 'Josefin Sans Std Light', arial, serif;
 }
 input {
 font-family: 'Josefin Sans Std Light', arial, serif;
 }
-li {
-font-family: 'Josefin Sans Std Light', arial, serif;
-list-style-type: none;
+
+ul {
+ list-style-type:none;
+
 }
 
 p {
@@ -34,98 +42,112 @@ margin: 0px;
 
     
 
-/*
+/* 2. Template
+ 
+ These are template items that show up on almost every page
+ */
 
-PROJECT
 
-*/
-.yellowblock {
+/*head is a container on top of the page.*/
+
+#head {
+
+    clear: left;
+    height: 0px;
+    padding: 0px;
+
+}
+/*Leftline is for the left thing running round the */
+#leftline {
 
     background: rgb(244,233,30);
+    width: 190px;
+    float: left;
+    min-height:800px;
 }
+ 
+#rightline {
 
-.QuestionTitleTD {
+    float: right;
 
-padding: 10px 0px 0px 10px;
-
-}
-
-.readable {
-
-    font-family: 'PT Sans', arial, serif; 
-    font-size: 16px;
-    letter-spacing: 1.2px;
-    line-height:20px;
-    color: rgb(0,0,0);
-    word-spacing: 3px;
+    width: 150px;
 
 }
 
-.comments {
+#footer {
 
-font-family: 'Josefin Sans Std Light', arial, serif;
-font-size: 14px;
-color: rgb(15,15,15);
-
+    clear:both;
+    height:50px;
 }
 
-.infotext {
+/*Small comments can be used for different stuff, for example project details*/
 
-}
-
-
-#project-ul li{
-
-    list-style-type:none; 
-    margin-top:6px;   
-
-}
-
-
-/*questionBlock and question-container is the question and project box*/
-
-#questionBlock {
-
-display: block;
-line-height: 20px;
-background: #fff;
-letter-spacing: 1.7px;
-padding-left: 0px;
-border-style:solid;
-border-width:0px;
-}
-
-/*Qtitle is the class of the span where the question title is.*/
-
-.Qtitle {
+.smallcomments {
     
-    color: blue;
+    font-family: 'Josefin Sans Std Light', arial, serif;
+    font-size: 14px;
+    color: rgb(15,15,15);
+    display:inline;
 
 }
 
-.questionText ul{
-    
+.smallcomments li {
+
     display: inline;
+}
+
+
+.add {
+
+    font-size: 12px;
+     color: rgb(2,90,191)
+     }
+     
+.add:hover { 
+    color:rgb(242,45,27);
 
 }
 
-.questionText ul li{
-    
-    display: inline;
+.add-comment {
+
+    font-size: 12px;
+     color: rgb(2,90,191);
+     float:right;
+     }
+     
+.add-comment:hover { 
+    color:rgb(242,45,27);
+
+}
+
+
+
+/* 
+*
+* 3. Project page 
+*
+*/
+
+#project-list {
+
+    margin-left: 10%;
 
 }
 
 /*Project-header is for the Projects */
 #project-header {
-	font-size: 48px;
+	
 	display: block;
-	line-height: 24px;
-	letter-spacing: 1.7px;
 	margin-top:32px;
     margin-bottom:5px;
     margin-left:1px;
 	text-decoration: none;
 		}
+        
+#project-header a{
+    font-size:12px;
+    
+}
 
 /*Project-container is for the listing on the first page with all the projects*/
 .project-container {
@@ -148,6 +170,189 @@ border-width:0px;
 		background: #C8C8C8;
 	    text-decoration: none;
         }
+
+
+#ProjectHolder {
+
+    margin-left:10%;
+
+}
+
+#ProjectHolder h1 {
+
+    font-size: 38px;
+    letter-spacing: 1.7px;
+    line-height: 24px;
+    font-weight: normal;
+}
+
+
+.inlinelist {
+
+    display:inline;
+
+}
+
+.yellowblock {
+
+    background: rgb(244,233,30);
+}
+
+#projectlist {
+color: rgb(124,124,124);
+font-size: 14px;
+
+}
+
+#projectlist:hover {
+    color: rgb(2,90,191);
+    text-decoration:underline;
+
+}
+
+a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 12px; color: rgb(2,90,191)}
+a.a1:hover { color:rgb(242,45,27);}
+ 
+h1 a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 12px; color: rgb(2,90,191)}
+
+
+
+/*
+*
+* 3. Questionpage
+*
+*/
+
+/*Qtitle is the class of the span where the question title is.*/
+
+.Qtitle {
+    
+    color: rgb(20,20,20);
+    font: Verdana, arial, serif;
+    font-size: 14px;
+
+}
+
+
+.QuestionTitleTD {
+
+padding: 0px 0px 0px 0px;
+
+}
+
+
+.readable {
+
+    font-family: arial, serif; 
+    font-size: 14px;
+    color: rgb(12,12,12);
+
+}
+
+.answers {
+
+    margin-top:10px;
+
+}
+
+.comments {
+
+font-family: 'Josefin Sans Std Light', arial, serif;
+font-size: 14px;
+color: rgb(15,15,15);
+
+}
+
+.answerBlock
+{
+display: block;
+padding-bottom: 2px;
+border-style:solid;
+border-width:0px;
+margin-left:15px;
+
+}
+
+.answerBlock:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibity: hidden;
+}
+
+.answer
+{
+display: block;
+background: #F0F0F0;
+margin-top: 10px;
+padding:3px 10px 15px 10px;
+text-align:justify;
+margin: 0px;
+border-style:solid;
+border-width:0px;
+}
+
+.answer p {
+
+padding: 15px 0px 2px 25px;
+
+}
+
+.questionText ul{
+    
+    display: inline;
+    font-family: Arial;
+    font-size: 12px;
+    color: (44,44,44);
+
+}
+
+.questionText ul li{
+    
+    display: inline;
+
+}
+
+
+/* explanationBlock is the placeholder div for the explanation of the question */
+
+.explanationBlock {
+    display: block;
+    text-align: left;
+    margin-left: 0px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+        }
+        
+#project-ul li{
+    
+    
+    list-style-type:none; 
+    margin-top:6px;   
+
+}
+
+
+/*questionBlock and question-container is the question and project box*/
+
+#questionBlock {
+
+display: block;
+line-height: 20px;
+background: #fff;
+letter-spacing: 1.7px;
+padding-left: 0px;
+border-style:solid;
+border-width:0px;
+font-family: Arial;
+}
+
+
+
+/*project-list is for holding the project-Header and project-continer on the first project page which displays the projects.*/
+
 
 /* answerButton is the button that opens the answer div */
 
@@ -174,52 +379,23 @@ a.answerButton:hover{
     background: #fff;
     text-align: left;
     margin-left: 20%;
+    font-size: 12px;
     padding-top: 0px;
     padding-left: 0px;
-    color: #000000;
+    color: rgb(89,89,89);
     text-decoration: none;
+        }
+.containerInComment {
     border-bottom-style:dotted;
     border-width: 1px;
-        }
+    
+}        
+        
+.comment-container a {
+     font-size: 12px;
+    
+}
                 
-/* commentButton is for the button that opens the comments*/
-
-a.commentButton {
-    background: fff;
-    text-align: left;
-    font: 0.7em Times; 
-    color: #0000FF;
-    /*height: 20px;*/
-    margin-top:5px;
-    margin-left:5px;
-    padding-top: 2px;
-    padding-left: 2px;
-    text-decoration:none;
-}
-
-a.commentButton:hover{
-   /* background: #6666FF;
-    color: #000000;*/
-    text-decoration: underline;
-}
-
-/* actionButton is for the edit and delete buttons*/
-
-a.actionButton {
-    background: fff;
-    text-align: left;
-    /*height: 20px;*/
-    margin-top:1px;
-    /*margin-left:1px;*/
-    padding-top: 1px;
-    padding-left: 1px;
-}
-
-a.actionButton:hover{
-   /* background: #6666FF;
-    color: #000000;*/
-}
-
 
 /* Comment-form is for the comment form */
 
@@ -259,6 +435,11 @@ a.addQuestion:hover {
     color: #000000;
     text-decoration: none;
         }
+        
+.addcomment-btn {
+    
+    float: right;
+}
 /* The btn-slide is for the "Comment" Button to make the form slide out. */
 
 a.btn-slide {
@@ -297,34 +478,8 @@ a.btn-slide:hover{
 	color: #b8b8b8;
 }
 
-/*explanationLI is the li which holds the explanation of a question.
-*/
 
-.explanationLI {
 
-    padding: 10px 0px 5px 10px;
-}
-
-/* explanationBlock is the placeholder div for the explanation of the question */
-
-.explanationBlock {
-    display: block;
-    background: #fff;
-    text-align: left;
-    margin-left: 0px;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    color: #000000;
-    text-decoration: none;
-    font-family:'PT Sans', arial;
-        }
-.explanationBlock li a p{
-
-font-family:'PT Sans', arial;
-
-}
-        
 .action-container a {
     display: block;
     float:right;
@@ -346,38 +501,6 @@ font-family:'PT Sans', arial;
         }
 
         
-/* rightdown-container is the box for the 'edit', 'delete',
-buttons inside the question box (link-container)*/        
-        
-.rightdown-container a {
-    display: block;
-    clear:both;
-    float: right;
-    background: #f0f0f0;
-    /*height:24px;*/
-    text-align: left;
-    padding-top: 1px;
-    padding-left: 1px;
-    padding-right: 1px;
-    color: #0000ff;
-	font: 0.9em;
-    text-decoration: none;
-    border-style:dotted;
-    border-width:0px;
-        }
-
-.rightdown-container a:hover {
-    text-decoration: underline;
-        }  
-
-  /*     
-body { 
-  background: url('/site_media/textTile.png') 0;
-  background-repeat:repeat-y;
-  
-}
-*/
-
 #clear {
     display: block;
     clear:both;
@@ -396,80 +519,28 @@ div#header a{
 padding-left:10px;
 padding-bottom: 10px;
 padding-bottom: 10px;
-padding-top: 10px;
+padding-top: 20px;
 margin-bottom: 5px;
-background: #fff;
-color: rgb(244,233,30);
+color: #fff;
 text-decoration: none;
 font-size: 44px;
 font-family: Cuprum, Verdana;
 }
 
-.answerBlock
-{
-display: block;
-line-height: 100%;
-letter-spacing: 1.7px;
-/* padding-left: 15px; */
-padding-bottom: 2px;
-border-style:solid;
-border-width:0px;
-font-family: 'PT Sans', arial;
-
-}
-
-.answerBlock:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibity: hidden;
-}
-
-.answer
-{
-display: block;
-background: #F0F0F0;
-margin-top: 10px;
-padding:3px 10px 15px 10px;
-text-align:justify;
-margin: 0px;
-border-style:solid;
-border-width:0px;
-}
-
-.answer p {
-
-padding: 15px 0px 2px 25px;
-
-}
 
 /* Show empty cells */
 table { empty-cells:show; }
 
 
 
-/*
-#question {
-  padding:10px;
-  border:0px solid gray;
-  background: #F8F8F8;
-  top: 0px;
-  left: 0px;
-  }
-  */
-/*  
+ 
   
-#body {
+body {
   margin: 0px;
   padding: 0px;
 }
-#header {
-  background: #fff;
-  
-  width: 100%;
-}
-*/
+
+
 #leftcol {
     float: left;
     border-style:solid;
@@ -508,29 +579,19 @@ table { empty-cells:show; }
 /* Navigation for the upper navigation*/
 
 .navigation a {
-    display: block;
-    background: #fff;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #fff;
-    font-weight:bold;
-    height:5%;
-    width: 100%;
+    color: rgb(124,124,124);
     text-align: center;
     padding-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 15px;
     margin: 1px;
-    color: #663366;
-    text-decoration: none;
     
         }
 
 .navigation a:hover {
-    background: #f0f0f0;
-    color: #663366;
-    text-decoration: none;
+    color: rgb(2,90,191);
+    text-decoration: underline;
         }  
 
 .login ul{
@@ -540,12 +601,8 @@ table { empty-cells:show; }
     padding: 0px;
 }
 
-div#container {
-    width:90%;
-    margin-right:auto;
-    margin-left:auto;
+div#middle {
     height:auto;
-    position:relative;
 }
 
 .login {
@@ -569,9 +626,5 @@ div#container {
 }
 
 
-#footer {
-  background: #0f0;
-  clear: both;
-  width: 100%;
-}
+
 

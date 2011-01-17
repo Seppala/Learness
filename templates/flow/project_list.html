@@ -3,26 +3,25 @@
 
 {% block primary %}
 
-<div class="action-container">
-<a class="a1" href="/flow/project/">Add Project</a>
-</div>
 
-<div id="project-header">All Projects:</div>
+<div id="project-list">
+<div id="project-header"><ul><li><h1>Your Projects:</h1></li><li><a class="a1" href="/flow/project/">Add Project</a></li></ul></div>
 
 {% if project_list %}
     <ul id="project-ul">
 	{% for project in project_list %}
     <li>
-	<a href= "/flow/{{ project.id }}/">
+	<a id="projectlist" href= "/flow/{{ project.id }}/">
 			{{ project.name }}
 	</a>
     </li>
 	{% endfor %}
     </ul>
 {% else %}
-	<p class="p2">No projects are available.</p>
+	<p class="p2">No projects are available. Create one for something you are learning to get started.</p>
 {% endif %}
-
+</div>
 
 {% endblock %}
+
 </html>

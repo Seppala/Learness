@@ -8,9 +8,18 @@
 	{% if error_message %}
 		<p class="p3"><b>{{ error_message }}</b></p>
 	{% endif %}
+    
+<div id="ProjectHolder">
 
-<p class="infotext comments">Project by: {{ project.owner.username }} Started on: {{ project.datecreated|date:"d.M.Y" }} -- <a href="/flow/question/{{project.id}}/">Add Question</a>
-</p>
+<h1>{{project.name}}</h1>
+
+<ul class="smallcomments">
+<li>Project by: {{ project.owner.username }} </li>
+<li>Started on: {{ project.datecreated|date:"d.M.Y" }} </li>
+</ul>
+<br>
+<a class="l add" href="/flow/question/{{project.id}}/">Add Question</a>
+
 {% if project.collaborators_set.all %}
 	<p class="infotext">
 		Collaborators:{% for collabs in project.appliers_set.all %}{{ collabs.username }}, {% endfor %}
@@ -53,11 +62,11 @@
         <tr class="QuestionTitleTR">
         <td>
             <div class="yellowblock">
-                &nbsp;
+                {{forloop.revcounter}}
             </div>
         </td>
         <td class=QuestionTitleTD>
-			<span class ="Qtitle readable">{{ gotQuestion.title  }}</span>	
+			<span class ="Qtitle">{{ gotQuestion.title  }}</span>	
         </td>
         </tr>
         </table>
@@ -75,30 +84,14 @@
 		
 <div class="answerBlock">
 		{% if isCollaborator or isOwner %}
-			<a href="/flow/edit/{{project.id}}/{{gotQuestion.id}}/" class="actionButton">edit</a><a> </a>
-			<a href="/flow/delete/{{project.id}}/{{gotQuestion.id}}/" class="actionButton">delete</a>
+			<a href="/flow/edit/{{project.id}}/{{gotQuestion.id}}/" class="add">edit</a><a> </a>
+			<a href="/flow/delete/{{project.id}}/{{gotQuestion.id}}/" class="add">delete</a>
 				{% for tag in project.tag_set.all %} - {{tag}}{% endfor %}
 		{% endif %}
 		
 	<div class="explanationBlock">
 	<!-- >{{ gotQuestion.explanation|markdown:"safe" }} -->
-    <table>
-    <ul>
-    <li class="explanationLI readable">
-        <div class="questionText">
-        <ul>
-            <li>
-                Q:
-            </li>
-            <li>
             {{ gotQuestion.explanation|markdown:"safe" }}
-            </li>
-         </ul>
-         </div>
-            
-    </li>
-    </ul>
-    </table>
 	</div>
 	
 	<!--<a class="answerButton">See/Hide Answers </a> -->
@@ -106,22 +99,21 @@
 	<div class="answerNcomments">
 		{% for answer in gotQuestion.answer_set.all %} 
 	
-		<div class="answer readable">
+		<div class="readable answers">
 
-			A: {{answer.explanation|markdown:"safe"  }}
+			{{answer.explanation|markdown:"safe"  }}
 
 			{% if isCollaborator or isOwner %}
 				<table>
 					<tr>
 						<td>
-							<div class="rightdown-container">
-								<a href="/flow/edit/{{project.id}}/{{gotQuestion.id}}/{{answer.id}}/" class="actionButton">edit</a>
-							</div>
+							
+								<a href="/flow/edit/{{project.id}}/{{gotQuestion.id}}/{{answer.id}}/" class="add">edit</a>
+							
 						</td>
 						<td>
-							<div class="rightdown-container">
-								<a href="/flow/delete/{{project.id}}/{{gotQuestion.id}}/{{answer.id}}/" class="actionButton">delete</a>
-							</div>
+                            <a href="/flow/delete/{{project.id}}/{{gotQuestion.id}}/{{answer.id}}/" class="add">delete</a>
+                                
 						</td>
 					</tr>
 				</table>
@@ -135,15 +127,16 @@ make up the Comments for each answer.-->
 <!-- The comment-container holds the comments and the comment form. --> 
 
 {% get_comment_list for answer as ans_comment %}
-{% for com in ans_comment %}
+
 <div class="comment-container">
-		<table width="100%">
+{% for com in ans_comment %}
+		<table class="containerInComment" width="100%">
 			<tr>
 				<td rowspan="2" width="75%">	
 					{{ com.comment }}
 				</td>
 				<td align="right">
-					<table class="commenter-table">
+					<table>
 						<tr>
 							<td>
 								{{com.name}}, {{com.submit_date|date:"d.M.Y  f"}}
@@ -163,21 +156,32 @@ make up the Comments for each answer.-->
 				</td>
 			</tr>	
 		</table>
-		
+{% endfor %} <!-- endfor for comments -->
+
 </div><!-- ends the comment-container --> 
-
-{% endfor %} <!-- endfor for comments --> 
-
-<a class="btn-slide">Add Comment</a>
+<a class="add-comment">Add Comment</a>
 <div class ="comment-form">
-{% render_comment_form for answer %}
+{% get_comment_form for answer as form %}
+<form action="{% comment_form_target %}" method="post">
+  <table>
+    <tr><td><label for="name">Name:</label></td><td>{{ form.name }}</td></tr>
+    <tr><td><label for="name">Email:</label></td><td>{{ form.email }}</td></tr>
+    <tr><td><label for="name">Website:</label></td><td>{{ form.url }}</td></tr>
+    <tr><td><label for="name">Comment:</label></td><td>{{ form.comment }}</td></tr>
+    
+    <tr><td><input type="submit" name="preview" class="submit-post" value="Preview"></td><td></td>
+  </tr>
+  </table>
+</form>
 </div><!-- ends the comment-form div -->
+
+
 
 {% endfor %} <!-- ends endfor for answers in questions --> 
 
 {% if isCollaborator or isOwner %}
 
-<a href="/flow/answer/{{project.id}}/{{gotQuestion.id}}/" class="actionButton">add answer</a>
+<a href="/flow/answer/{{project.id}}/{{gotQuestion.id}}/" class="add">add answer</a>
 
 {% endif %}
 
@@ -187,8 +191,8 @@ make up the Comments for each answer.-->
 {% endfor %}
 
 {% if isCollaborator or isOwner %}
-<a href="/flow/question/{{project.id}}/" class="actionButton">Add Question</a>
+<a href="/flow/question/{{project.id}}/" class="add">Add Question</a>
 {% endif %}
-
+</div>
 {% endblock %}
 
