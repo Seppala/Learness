@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -11,13 +11,12 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 	var protectedSourceMarker = '{cke_protected}';
 
-
 	// Return the last non-space child node of the block (#4344).
 	function lastNoneSpaceChild( block )
 	{
 		var lastIndex = block.children.length,
 			last = block.children[ lastIndex - 1 ];
-		while(  last && last.type == CKEDITOR.NODE_TEXT && !CKEDITOR.tools.trim( last.value ) )
+		while (  last && last.type == CKEDITOR.NODE_TEXT && !CKEDITOR.tools.trim( last.value ) )
 			last = block.children[ --lastIndex ];
 		return last;
 	}
@@ -39,31 +38,44 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		}
 	}
 
-	function blockNeedsExtension( block )
+	function blockNeedsExtension( block, fromSource, extendEmptyBlock )
 	{
+		if( !fromSource && ( !extendEmptyBlock ||
+			typeof extendEmptyBlock == 'function' && ( extendEmptyBlock( block ) === false ) ) )
+			return false;
+
+        // 1. For IE version >=8,  empty blocks are displayed correctly themself in wysiwiyg;
+        // 2. For the rest, at least table cell and list item need no filler space.
+        // (#6248)
+        if ( fromSource && CKEDITOR.env.ie &&
+                ( document.documentMode > 7
+                || block.name in CKEDITOR.dtd.tr
+                || block.name in CKEDITOR.dtd.$listItem ) )
+            return false;
+
 		var lastChild = lastNoneSpaceChild( block );
-		return !lastChild || lastChild.type == CKEDITOR.NODE_ELEMENT && lastChild.name == 'br';
+
+		return !lastChild || lastChild &&
+				( lastChild.type == CKEDITOR.NODE_ELEMENT && lastChild.name == 'br'
+				// Some of the controls in form needs extension too,
+				// to move cursor at the end of the form. (#4791)
+				|| block.name == 'form' && lastChild.name == 'input' );
 	}
 
-	function extendBlockForDisplay( block )
+	function getBlockExtension( isOutput, emptyBlockFiller )
 	{
-		trimFillers( block, true );
-
-		if ( blockNeedsExtension( block ) )
+		return function( node )
 		{
-			if ( CKEDITOR.env.ie )
-				block.add( new CKEDITOR.htmlParser.text( '\xa0' ) );
-			else
-				block.add( new CKEDITOR.htmlParser.element( 'br', {} ) );
-		}
-	}
+			trimFillers( node, !isOutput );
 
-	function extendBlockForOutput( block )
-	{
-		trimFillers( block );
-
-		if ( blockNeedsExtension( block ) )
-			block.add( new CKEDITOR.htmlParser.text( '\xa0' ) );
+			if ( blockNeedsExtension( node, !isOutput, emptyBlockFiller ) )
+			{
+				if ( isOutput || CKEDITOR.env.ie )
+					node.add( new CKEDITOR.htmlParser.text( '\xa0' ) );
+				else
+					node.add( new CKEDITOR.htmlParser.element( 'br', {} ) );
+			}
+		};
 	}
 
 	var dtd = CKEDITOR.dtd;
@@ -80,18 +92,19 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 	delete blockLikeTags.pre;
 	var defaultDataFilterRules =
 	{
+		elements : {},
 		attributeNames :
 		[
 			// Event attributes (onXYZ) must not be directly set. They can become
 			// active in the editing area (IE|WebKit).
-			[ ( /^on/ ), '_cke_pa_on' ]
+			[ ( /^on/ ), 'data-cke-pa-on' ]
 		]
 	};
 
 	var defaultDataBlockFilterRules = { elements : {} };
 
 	for ( i in blockLikeTags )
-		defaultDataBlockFilterRules.elements[ i ] = extendBlockForDisplay;
+		defaultDataBlockFilterRules.elements[ i ] = getBlockExtension();
 
 	var defaultHtmlFilterRules =
 		{
@@ -107,29 +120,37 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			attributeNames :
 			[
 				// Attributes saved for changes and protected attributes.
-				[ ( /^_cke_(saved|pa)_/ ), '' ],
+				[ ( /^data-cke-(saved|pa)-/ ), '' ],
 
-				// All "_cke" attributes are to be ignored.
-				[ ( /^_cke.*/ ), '' ]
+				// All "data-cke" attributes are to be ignored.
+				[ ( /^data-cke.*/ ), '' ],
+
+				[ 'hidefocus', '' ]
 			],
 
 			elements :
 			{
 				$ : function( element )
 				{
-					// Remove duplicated attributes - #3789.
 					var attribs = element.attributes;
 
 					if ( attribs )
 					{
+						// Elements marked as temporary are to be ignored.
+						if ( attribs[ 'data-cke-temp' ] )
+							return false;
+
+						// Remove duplicated attributes - #3789.
 						var attributeNames = [ 'name', 'href', 'src' ],
 							savedAttributeName;
 						for ( var i = 0 ; i < attributeNames.length ; i++ )
 						{
-							savedAttributeName = '_cke_saved_' + attributeNames[ i ];
+							savedAttributeName = 'data-cke-saved-' + attributeNames[ i ];
 							savedAttributeName in attribs && ( delete attribs[ attributeNames[ i ] ] );
 						}
 					}
+
+					return element;
 				},
 
 				embed : function( element )
@@ -159,10 +180,44 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 				{
 					if ( !( element.children.length ||
 							element.attributes.name ||
-							element.attributes._cke_saved_name ) )
+							element.attributes[ 'data-cke-saved-name' ] ) )
 					{
 						return false;
 					}
+				},
+
+				// Remove dummy span in webkit.
+				span: function( element )
+				{
+					if ( element.attributes[ 'class' ] == 'Apple-style-span' )
+						delete element.name;
+				},
+
+				html : function( element )
+				{
+					delete element.attributes.contenteditable;
+					delete element.attributes[ 'class' ];
+				},
+
+				body : function( element )
+				{
+					delete element.attributes.spellcheck;
+					delete element.attributes.contenteditable;
+				},
+
+				style : function( element )
+				{
+					var child = element.children[ 0 ];
+					child && child.value && ( child.value = CKEDITOR.tools.trim( child.value ));
+
+					if ( !element.attributes.type )
+						element.attributes.type = 'text/css';
+				},
+
+				title : function( element )
+				{
+					var titleText = element.children[ 0 ];
+					titleText && ( titleText.value = element.attributes[ 'data-cke-title' ] || '' );
 				}
 			},
 
@@ -177,17 +232,21 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 			comment : function( contents )
 			{
+				// If this is a comment for protected source.
 				if ( contents.substr( 0, protectedSourceMarker.length ) == protectedSourceMarker )
-					return new CKEDITOR.htmlParser.cdata( decodeURIComponent( contents.substr( protectedSourceMarker.length ) ) );
+				{
+					// Remove the extra marker for real comments from it.
+					if ( contents.substr( protectedSourceMarker.length, 3 ) == '{C}' )
+						contents = contents.substr( protectedSourceMarker.length + 3 );
+					else
+						contents = contents.substr( protectedSourceMarker.length );
+
+					return new CKEDITOR.htmlParser.cdata( decodeURIComponent( contents ) );
+				}
 
 				return contents;
 			}
 		};
-
-	var defaultHtmlBlockFilterRules = { elements : {} };
-
-	for ( i in blockLikeTags )
-		defaultHtmlBlockFilterRules.elements[ i ] = extendBlockForOutput;
 
 	if ( CKEDITOR.env.ie )
 	{
@@ -199,71 +258,130 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		};
 	}
 
-	var protectAttributeRegex = /<(?:a|area|img|input).*?\s((?:href|src|name)\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|(?:[^ "'>]+)))/gi;
+	function protectReadOnly( element )
+	{
+		element.attributes.contenteditable = "false";
+	}
+	function unprotectReadyOnly( element )
+	{
+		delete element.attributes.contenteditable;
+	}
+	// Disable form elements editing mode provided by some browers. (#5746)
+	for ( i in { input : 1, textarea : 1 } )
+	{
+		defaultDataFilterRules.elements[ i ] = protectReadOnly;
+		defaultHtmlFilterRules.elements[ i ] = unprotectReadyOnly;
+	}
+
+	var protectAttributeRegex = /<((?:a|area|img|input)\b[\s\S]*?\s)((href|src|name)\s*=\s*(?:(?:"[^"]*")|(?:'[^']*')|(?:[^ "'>]+)))([^>]*)>/gi,
+		findSavedSrcRegex = /\sdata-cke-saved-src\s*=/;
+
+	var protectElementsRegex = /(?:<style(?=[ >])[^>]*>[\s\S]*<\/style>)|(?:<(:?link|meta|base)[^>]*>)/gi,
+		encodedElementsRegex = /<cke:encoded>([^<]*)<\/cke:encoded>/gi;
+
+	var protectElementNamesRegex = /(<\/?)((?:object|embed|param|html|body|head|title)[^>]*>)/gi,
+		unprotectElementNamesRegex = /(<\/?)cke:((?:html|body|head|title)[^>]*>)/gi;
+
+	var protectSelfClosingRegex = /<cke:(param|embed)([^>]*?)\/?>(?!\s*<\/cke:\1)/gi;
 
 	function protectAttributes( html )
 	{
-		return html.replace( protectAttributeRegex, '$& _cke_saved_$1' );
+		return html.replace( protectAttributeRegex, function( tag, beginning, fullAttr, attrName, end )
+			{
+				// We should not rewrite the _cke_saved_src attribute (#5218)
+				if ( attrName == 'src' && findSavedSrcRegex.test( tag ) )
+					return tag;
+				else
+					return '<' + beginning + fullAttr + ' data-cke-saved-' + fullAttr + end + '>';
+			});
 	}
 
-	var protectStyleTagsRegex = /<(style)(?=[ >])[^>]*>[^<]*<\/\1>/gi;
-	var encodedTagsRegex = /<cke:encoded>([^<]*)<\/cke:encoded>/gi;
-	var protectElementNamesRegex = /(<\/?)((?:object|embed|param).*?>)/gi;
-	var protectSelfClosingRegex = /<cke:param(.*?)\/>/gi;
-
-	function protectStyleTagsMatch( match )
+	function protectElements( html )
 	{
-		return '<cke:encoded>' + encodeURIComponent( match ) + '</cke:encoded>';
+		return html.replace( protectElementsRegex, function( match )
+			{
+				return '<cke:encoded>' + encodeURIComponent( match ) + '</cke:encoded>';
+			});
 	}
 
-	function protectStyleTags( html )
+	function unprotectElements( html )
 	{
-		return html.replace( protectStyleTagsRegex, protectStyleTagsMatch );
+		return html.replace( encodedElementsRegex, function( match, encoded )
+			{
+				return decodeURIComponent( encoded );
+			});
 	}
+
 	function protectElementsNames( html )
 	{
 		return html.replace( protectElementNamesRegex, '$1cke:$2');
 	}
+
+	function unprotectElementNames( html )
+	{
+		return html.replace( unprotectElementNamesRegex, '$1$2' );
+	}
+
 	function protectSelfClosingElements( html )
 	{
-		return html.replace( protectSelfClosingRegex, '<cke:param$1></cke:param>' );
+		return html.replace( protectSelfClosingRegex, '<cke:$1$2></cke:$1>' );
 	}
 
-	function unprotectEncodedTagsMatch( match, encoded )
+	function protectPreFormatted( html )
 	{
-		return decodeURIComponent( encoded );
+		return html.replace( /(<pre\b[^>]*>)(\r\n|\n)/g, '$1$2$2' );
 	}
 
-	function unprotectEncodedTags( html )
+	function protectRealComments( html )
 	{
-		return html.replace( encodedTagsRegex, unprotectEncodedTagsMatch );
+		return html.replace( /<!--(?!{cke_protected})[\s\S]+?-->/g, function( match )
+			{
+				return '<!--' + protectedSourceMarker +
+						'{C}' +
+						encodeURIComponent( match ).replace( /--/g, '%2D%2D' ) +
+						'-->';
+			});
+	}
+
+	function unprotectRealComments( html )
+	{
+		return html.replace( /<!--\{cke_protected\}\{C\}([\s\S]+?)-->/g, function( match, data )
+			{
+				return decodeURIComponent( data );
+			});
 	}
 
 	function protectSource( data, protectRegexes )
 	{
 		var protectedHtml = [],
-			tempRegex = /<\!--\{cke_temp\}(\d*?)-->/g;
+			tempRegex = /<\!--\{cke_temp(comment)?\}(\d*?)-->/g;
+
 		var regexes =
 			[
-				// First of any other protection, we must protect all comments
-				// to avoid loosing them (of course, IE related).
-				(/<!--[\s\S]*?-->/g),
-
 				// Script tags will also be forced to be protected, otherwise
 				// IE will execute them.
-				/<script[\s\S]*?<\/script>/gi,
+				( /<script[\s\S]*?<\/script>/gi ),
 
 				// <noscript> tags (get lost in IE and messed up in FF).
 				/<noscript[\s\S]*?<\/noscript>/gi
 			]
 			.concat( protectRegexes );
 
+		// First of any other protection, we must protect all comments
+		// to avoid loosing them (of course, IE related).
+		// Note that we use a different tag for comments, as we need to
+		// transform them when applying filters.
+		data = data.replace( (/<!--[\s\S]*?-->/g), function( match )
+			{
+				return  '<!--{cke_tempcomment}' + ( protectedHtml.push( match ) - 1 ) + '-->';
+			});
+
 		for ( var i = 0 ; i < regexes.length ; i++ )
 		{
 			data = data.replace( regexes[i], function( match )
 				{
 					match = match.replace( tempRegex, 		// There could be protected source inside another one. (#3869).
-						function( $, id )
+						function( $, isComment, id )
 						{
 							return protectedHtml[ id ];
 						}
@@ -271,9 +389,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 					return  '<!--{cke_temp}' + ( protectedHtml.push( match ) - 1 ) + '-->';
 				});
 		}
-		data = data.replace( tempRegex,	function( $, id )
+		data = data.replace( tempRegex,	function( $, isComment, id )
 			{
 				return '<!--' + protectedSourceMarker +
+						( isComment ? '{C}' : '' ) +
 						encodeURIComponent( protectedHtml[ id ] ).replace( /--/g, '%2D%2D' ) +
 						'-->';
 			}
@@ -294,7 +413,17 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			dataProcessor.dataFilter.addRules( defaultDataFilterRules );
 			dataProcessor.dataFilter.addRules( defaultDataBlockFilterRules );
 			dataProcessor.htmlFilter.addRules( defaultHtmlFilterRules );
+
+			var defaultHtmlBlockFilterRules = { elements : {} };
+			for ( i in blockLikeTags )
+				defaultHtmlBlockFilterRules.elements[ i ] = getBlockExtension( true, editor.config.fillEmptyBlocks );
+
 			dataProcessor.htmlFilter.addRules( defaultHtmlBlockFilterRules );
+		},
+
+		onLoad : function()
+		{
+			! ( 'fillEmptyBlocks' in CKEDITOR.config ) && ( CKEDITOR.config.fillEmptyBlocks = 1 );
 		}
 	});
 
@@ -321,27 +450,37 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			// the code.
 			data = protectAttributes( data );
 
-			// IE remvoes style tags from innerHTML. (#3710).
-			if ( CKEDITOR.env.ie )
-				data = protectStyleTags( data );
+			// Protect elements than can't be set inside a DIV. E.g. IE removes
+			// style tags from innerHTML. (#3710)
+			data = protectElements( data );
 
 			// Certain elements has problem to go through DOM operation, protect
-			// them by prefixing 'cke' namespace.(#3591)
+			// them by prefixing 'cke' namespace. (#3591)
 			data = protectElementsNames( data );
 
 			// All none-IE browsers ignore self-closed custom elements,
-			// protecting them into open-close.(#3591)
+			// protecting them into open-close. (#3591)
 			data = protectSelfClosingElements( data );
+
+			// Compensate one leading line break after <pre> open as browsers
+			// eat it up. (#5789)
+			data = protectPreFormatted( data );
 
 			// Call the browser to help us fixing a possibly invalid HTML
 			// structure.
-			var div = document.createElement( 'div' );
+			var div = new CKEDITOR.dom.element( 'div' );
 			// Add fake character to workaround IE comments bug. (#3801)
-			div.innerHTML = 'a' + data;
-			data = div.innerHTML.substr( 1 );
+			div.setHtml( 'a' + data );
+			data = div.getHtml().substr( 1 );
 
-			if ( CKEDITOR.env.ie )
-				data = unprotectEncodedTags( data );
+			// Unprotect "some" of the protected elements at this point.
+			data = unprotectElementNames( data );
+
+			data = unprotectElements( data );
+
+			// Restore the comments that have been protected, in this way they
+			// can be properly filtered.
+			data = unprotectRealComments( data );
 
 			// Now use our parser to make further fixes to the structure, as
 			// well as apply the filter.
@@ -349,8 +488,12 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 				writer = new CKEDITOR.htmlParser.basicWriter();
 
 			fragment.writeHtml( writer, this.dataFilter );
+			data = writer.getHtml( true );
 
-			return writer.getHtml( true );
+			// Protect the real comments again.
+			data = protectRealComments( data );
+
+			return data;
 		},
 
 		toDataFormat : function( html, fixForBody )
@@ -369,12 +512,32 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 /**
  * Whether to force using "&" instead of "&amp;amp;" in elements attributes
- * values. It's not recommended to change this setting for compliance with the
- * W3C XHTML 1.0 standards
- * (<a href="http://www.w3.org/TR/xhtml1/#C_12">C.12, XHTML 1.0</a>).
+ * values, it's not recommended to change this setting for compliance with the
+ * W3C XHTML 1.0 standards (<a href="http://www.w3.org/TR/xhtml1/#C_12">C.12, XHTML 1.0</a>).
+ * @name CKEDITOR.config.forceSimpleAmpersand
+ * @name CKEDITOR.config.forceSimpleAmpersand
  * @type Boolean
  * @default false
  * @example
  * config.forceSimpleAmpersand = false;
  */
-CKEDITOR.config.forceSimpleAmpersand = false;
+
+/**
+ * Whether a filler text (non-breaking space entity - &nbsp;) will be inserted into empty block elements in HTML output,
+ * this is used to render block elements properly with line-height; When a function is instead specified,
+ * it'll be passed a {@link CKEDITOR.htmlParser.element} to decide whether adding the filler text
+ * by expecting a boolean return value.
+ * @name CKEDITOR.config.fillEmptyBlocks
+ * @since 3.5
+ * @type Boolean
+ * @default true
+ * @example
+ * config.fillEmptyBlocks = false;	// Prevent filler nodes in all empty blocks.
+ *
+ * // Prevent filler node only in float cleaners.
+ * config.fillEmptyBlocks = function( element )
+ * {
+ * 	if ( element.attributes[ 'class' ].indexOf ( 'clear-both' ) != -1 )
+ * 		return false;
+ * }
+ */

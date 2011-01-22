@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -9,7 +9,9 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 	 * Simulate "this" of a dialog for non-dialog events.
 	 * @type {CKEDITOR.dialog}
 	 */
-	var dialog;
+	var dialog,
+		lang = editor.lang.specialChar;
+
 	var onChoice = function( evt )
 	{
 		var target, value;
@@ -22,6 +24,7 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 		{
 			target.removeClass( "cke_light_background" );
 			dialog.hide();
+
 			editor.insertHtml( value );
 		}
 	};
@@ -79,37 +82,11 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 		// Get an Anchor element.
 		var element = ev.getTarget();
 		var relative, nodeToMove;
-		var keystroke = ev.getKeystroke();
+		var keystroke = ev.getKeystroke(),
+			rtl = editor.lang.dir == 'rtl';
 
 		switch ( keystroke )
 		{
-			// RIGHT-ARROW
-			case 39 :
-				// relative is TD
-				if ( ( relative = element.getParent().getNext() ) )
-				{
-					nodeToMove = relative.getChild( 0 );
-					if ( nodeToMove.type == 1 )
-					{
-						nodeToMove.focus();
-						onBlur( null, element );
-						onFocus( null, nodeToMove );
-					}
-				}
-				ev.preventDefault();
-				break;
-			// LEFT-ARROW
-			case 37 :
-				// relative is TD
-				if ( ( relative = element.getParent().getPrevious() ) )
-				{
-					nodeToMove = relative.getChild( 0 );
-					nodeToMove.focus();
-					onBlur( null, element );
-					onFocus( null, nodeToMove );
-				}
-				ev.preventDefault();
-				break;
 			// UP-ARROW
 			case 38 :
 				// relative is TR
@@ -143,6 +120,9 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 				onChoice( { data: ev } );
 				ev.preventDefault();
 				break;
+
+			// RIGHT-ARROW
+			case rtl ? 37 : 39 :
 			// TAB
 			case 9 :
 				// relative is TD
@@ -174,6 +154,9 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 						onBlur( null, element );
 				}
 				break;
+
+			// LEFT-ARROW
+			case rtl ? 39 : 37 :
 			// SHIFT + TAB
 			case CKEDITOR.SHIFT + 9 :
 				// relative is TD
@@ -204,66 +187,67 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 	});
 
 	return {
-		title : editor.lang.specialChar.title,
+		title : lang.title,
 		minWidth : 430,
 		minHeight : 280,
 		buttons : [ CKEDITOR.dialog.cancelButton ],
 		charColumns : 17,
-		chars :
-			[
-				'!','&quot;','#','$','%','&amp;',"'",'(',')','*','+','-','.','/',
-				'0','1','2','3','4','5','6','7','8','9',':',';',
-				'&lt;','=','&gt;','?','@',
-				'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O',
-				'P','Q','R','S','T','U','V','W','X','Y','Z',
-				'[',']','^','_','`',
-				'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p',
-				'q','r','s','t','u','v','w','x','y','z',
-				'{','|','}','~','&euro;','&lsquo;','&rsquo;','&rsquo;','&ldquo;',
-				'&rdquo;','&ndash;','&mdash;','&iexcl;','&cent;','&pound;',
-				'&curren;','&yen;','&brvbar;','&sect;','&uml;','&copy;','&ordf;',
-				'&laquo;','&not;','&reg;','&macr;','&deg;','&plusmn;','&sup2;',
-				'&sup3;','&acute;','&micro;','&para;','&middot;','&cedil;',
-				'&sup1;','&ordm;','&raquo;','&frac14;','&frac12;','&frac34;',
-				'&iquest;','&Agrave;','&Aacute;','&Acirc;','&Atilde;','&Auml;',
-				'&Aring;','&AElig;','&Ccedil;','&Egrave;','&Eacute;','&Ecirc;',
-				'&Euml;','&Igrave;','&Iacute;','&Icirc;','&Iuml;','&ETH;',
-				'&Ntilde;','&Ograve;','&Oacute;','&Ocirc;','&Otilde;','&Ouml;',
-				'&times;','&Oslash;','&Ugrave;','&Uacute;','&Ucirc;','&Uuml;',
-				'&Yacute;','&THORN;','&szlig;','&agrave;','&aacute;','&acirc;',
-				'&atilde;','&auml;','&aring;','&aelig;','&ccedil;','&egrave;',
-				'&eacute;','&ecirc;','&euml;','&igrave;','&iacute;','&icirc;',
-				'&iuml;','&eth;','&ntilde;','&ograve;','&oacute;','&ocirc;',
-				'&otilde;','&ouml;','&divide;','&oslash;','&ugrave;','&uacute;',
-				'&ucirc;','&uuml;','&uuml;','&yacute;','&thorn;','&yuml;',
-				'&OElig;','&oelig;','&#372;','&#374','&#373','&#375;','&sbquo;',
-				'&#8219;','&bdquo;','&hellip;','&trade;','&#9658;','&bull;',
-				'&rarr;','&rArr;','&hArr;','&diams;','&asymp;'
-			],
 		onLoad :  function()
 		{
 			var columns = this.definition.charColumns,
-				chars = this.definition.chars;
+				extraChars = editor.config.extraSpecialChars,
+				chars = editor.config.specialChars;
 
-			var html = [ '<table style="width: 320px; height: 100%; border-collapse: separate;" align="center" cellspacing="2" cellpadding="2" border="0">' ];
+			var charsTableLabel =  CKEDITOR.tools.getNextId() + '_specialchar_table_label';
+			var html = [ '<table role="listbox" aria-labelledby="' + charsTableLabel + '"' +
+						 			' style="width: 320px; height: 100%; border-collapse: separate;"' +
+						 			' align="center" cellspacing="2" cellpadding="2" border="0">' ];
 
-			var i = 0 ;
-			while ( i < chars.length )
+			var i = 0,
+				size = chars.length,
+				character,
+				charDesc;
+
+			while ( i < size )
 			{
 				html.push( '<tr>' ) ;
 
-				for( var j = 0 ; j < columns ; j++, i++ )
+				for ( var j = 0 ; j < columns ; j++, i++ )
 				{
-					if ( chars[ i ] )
+					if ( ( character = chars[ i ] ) )
 					{
+						charDesc = '';
+
+						if ( character instanceof Array )
+						{
+							charDesc = character[ 1 ];
+							character = character[ 0 ];
+						}
+						else
+						{
+							var _tmpName = character.toLowerCase().replace( '&', '' ).replace( ';', '' ).replace( '#', '' );
+
+							// Use character in case description unavailable.
+							charDesc = lang[ _tmpName ] || character;
+						}
+
+						var charLabelId =  'cke_specialchar_label_' + i + '_' + CKEDITOR.tools.getNextNumber();
+
 						html.push(
-							'<td class="cke_dark_background" style="cursor: default">' +
-							'<a href="javascript: void(0);" style="cursor: inherit; display: block; height: 1.25em; margin-top: 0.25em; text-align: center;" title="', chars[i].replace( /&/g, '&amp;' ), '"' +
+							'<td class="cke_dark_background" style="cursor: default" role="presentation">' +
+							'<a href="javascript: void(0);" role="option"' +
+							' aria-posinset="' + ( i +1 ) + '"',
+							' aria-setsize="' + size + '"',
+							' aria-labelledby="' + charLabelId + '"',
+							' style="cursor: inherit; display: block; height: 1.25em; margin-top: 0.25em; text-align: center;" title="', CKEDITOR.tools.htmlEncode( charDesc ), '"' +
 							' onkeydown="CKEDITOR.tools.callFunction( ' + onKeydown + ', event, this )"' +
 							' onclick="CKEDITOR.tools.callFunction(' + onClick + ', this); return false;"' +
 							' tabindex="-1">' +
 							'<span style="margin: 0 auto;cursor: inherit">' +
-							chars[i] +
+							character +
+							'</span>' +
+							'<span class="cke_voice_label" id="' + charLabelId + '">' +
+							charDesc +
 							'</span></a>');
 					}
 					else
@@ -274,7 +258,7 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 				html.push( '</tr>' );
 			}
 
-			html.push( '</tbody></table>' );
+			html.push( '</tbody></table>', '<span id="' + charsTableLabel + '" class="cke_voice_label">' + lang.options +'</span>' );
 
 			this.getContentElement( 'info', 'charContainer' ).getElement().setHtml( html.join( '' ) );
 		},
@@ -300,22 +284,21 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 								onMouseout : onBlur,
 								focus : function()
 								{
-									var firstChar = this.getElement().getChild( [0, 0, 0, 0, 0] );
-									setTimeout(function()
+									var firstChar = this.getElement().getElementsByTag( 'a' ).getItem( 0 );
+									setTimeout( function()
 									{
 										firstChar.focus();
 										onFocus( null, firstChar );
-									});
+									}, 0 );
 								},
-								// Needed only for webkit.
 								onShow : function()
 								{
-									var firstChar = this.getElement().getChild( [0, 0, 0, 0, 0] );
-									setTimeout(function()
-									{
-										firstChar.focus();
-										onFocus( null, firstChar );
-									});
+									var firstChar = this.getElement().getChild( [ 0, 0, 0, 0, 0 ] );
+									setTimeout( function()
+										{
+											firstChar.focus();
+											onFocus( null, firstChar );
+										}, 0 );
 								},
 								onLoad : function( event )
 								{
@@ -340,13 +323,15 @@ CKEDITOR.dialog.add( 'specialchar', function( editor )
 											{
 												type : 'html',
 												id : 'charPreview',
-												style : 'border:1px solid #eeeeee;background-color:#EAEAD1;font-size:28px;height:40px;width:70px;padding-top:9px;font-family:\'Microsoft Sans Serif\',Arial,Helvetica,Verdana;text-align:center;',
+												className : 'cke_dark_background',
+												style : 'border:1px solid #eeeeee;font-size:28px;height:40px;width:70px;padding-top:9px;font-family:\'Microsoft Sans Serif\',Arial,Helvetica,Verdana;text-align:center;',
 												html : '<div>&nbsp;</div>'
 											},
 											{
 												type : 'html',
 												id : 'htmlPreview',
-												style : 'border:1px solid #eeeeee;background-color:#EAEAD1;font-size:14px;height:20px;width:70px;padding-top:2px;font-family:\'Microsoft Sans Serif\',Arial,Helvetica,Verdana;text-align:center;',
+												className : 'cke_dark_background',
+												style : 'border:1px solid #eeeeee;font-size:14px;height:20px;width:70px;padding-top:2px;font-family:\'Microsoft Sans Serif\',Arial,Helvetica,Verdana;text-align:center;',
 												html : '<div>&nbsp;</div>'
 											}
 										]

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -173,9 +173,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 		var makeObjectTag = !editor.config.flashEmbedTagOnly,
 			makeEmbedTag = editor.config.flashAddEmbedTag || editor.config.flashEmbedTagOnly;
 
-		var previewAreaHtml = '<div>' + CKEDITOR.tools.htmlEncode( editor.lang.image.preview ) +'<br>' +
-			'<div id="FlashPreviewLoader" style="display:none"><div class="loading">&nbsp;</div></div>' +
-			'<div id="FlashPreviewBox"></div></div>';
+		var previewPreloader,
+			previewAreaHtml = '<div>' + CKEDITOR.tools.htmlEncode( editor.lang.common.preview ) +'<br>' +
+			'<div id="cke_FlashPreviewLoader' + CKEDITOR.tools.getNextNumber() + '" style="display:none"><div class="loading">&nbsp;</div></div>' +
+			'<div id="cke_FlashPreviewBox' + CKEDITOR.tools.getNextNumber() + '" class="FlashPreviewBox"></div></div>';
 
 		return {
 			title : editor.lang.flash.title,
@@ -185,10 +186,11 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 			{
 				// Clear previously saved elements.
 				this.fakeImage = this.objectNode = this.embedNode = null;
+				previewPreloader = new CKEDITOR.dom.element( 'embed', editor.document );
 
 				// Try to detect any embed or object tag that has Flash parameters.
 				var fakeImage = this.getSelectedElement();
-				if ( fakeImage && fakeImage.getAttribute( '_cke_real_element_type' ) && fakeImage.getAttribute( '_cke_real_element_type' ) == 'flash' )
+				if ( fakeImage && fakeImage.data( 'cke-real-element-type' ) && fakeImage.data( 'cke-real-element-type' ) == 'flash' )
 				{
 					this.fakeImage = fakeImage;
 
@@ -263,15 +265,21 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 						paramMap[ paramList.getItem( i ).getAttribute( 'name' ) ] = paramList.getItem( i );
 				}
 
-				// Apply or remove flash parameters.
-				var extraStyles = {};
-				this.commitContent( objectNode, embedNode, paramMap, extraStyles );
+				// A subset of the specified attributes/styles
+				// should also be applied on the fake element to
+				// have better visual effect. (#5240)
+				var extraStyles = {}, extraAttributes = {};
+				this.commitContent( objectNode, embedNode, paramMap, extraStyles, extraAttributes );
 
 				// Refresh the fake image.
 				var newFakeImage = editor.createFakeElement( objectNode || embedNode, 'cke_flash', 'flash', true );
+				newFakeImage.setAttributes( extraAttributes );
 				newFakeImage.setStyles( extraStyles );
 				if ( this.fakeImage )
+				{
 					newFakeImage.replace( this.fakeImage );
+					editor.getSelection().selectElement( newFakeImage );
+				}
 				else
 					editor.insertElement( newFakeImage );
 			},
@@ -295,10 +303,6 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							children :
 							[
 								{
-									type : 'html',
-									html : '<span>' + CKEDITOR.tools.htmlEncode( editor.lang.image.url ) + '</span>'
-								},
-								{
 									type : 'hbox',
 									widths : [ '280px', '110px' ],
 									align : 'right',
@@ -307,7 +311,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 										{
 											id : 'src',
 											type : 'text',
-											label : '',
+											label : editor.lang.common.url,
+											required : true,
 											validate : CKEDITOR.dialog.validate.notEmpty( editor.lang.flash.validateSrc ),
 											setup : loadValue,
 											commit : commitValue,
@@ -315,9 +320,10 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 											{
 												var dialog = this.getDialog(),
 												updatePreview = function( src ){
-
+													// Query the preloader to figure out the url impacted by based href.
+													previewPreloader.setAttribute( 'src', src );
 													dialog.preview.setHtml( '<embed height="100%" width="100%" src="'
-														+ CKEDITOR.tools.htmlEncode( src )
+														+ CKEDITOR.tools.htmlEncode( previewPreloader.getAttribute( 'src' ) )
 														+ '" type="application/x-shockwave-flash"></embed>' );
 												};
 												// Preview element
@@ -341,7 +347,9 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 											id : 'browse',
 											filebrowser : 'info:src',
 											hidden : true,
-											align : 'center',
+											// v-align with the 'src' field.
+											// TODO: We need something better than a fixed size here.
+											style : 'display:inline-block;margin-top:10px;',
 											label : editor.lang.common.browseServer
 										}
 									]
@@ -357,8 +365,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 									type : 'text',
 									id : 'width',
 									style : 'width:95px',
-									label : editor.lang.flash.width,
-									validate : CKEDITOR.dialog.validate.integer( editor.lang.flash.validateWidth ),
+									label : editor.lang.common.width,
+									validate : CKEDITOR.dialog.validate.integer( editor.lang.common.invalidWidth ),
 									setup : function( objectNode, embedNode, paramMap, fakeImage )
 									{
 										loadValue.apply( this, arguments );
@@ -380,8 +388,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 									type : 'text',
 									id : 'height',
 									style : 'width:95px',
-									label : editor.lang.flash.height,
-									validate : CKEDITOR.dialog.validate.integer( editor.lang.flash.validateHeight ),
+									label : editor.lang.common.height,
+									validate : CKEDITOR.dialog.validate.integer( editor.lang.common.invalidHeight ),
 									setup : function( objectNode, embedNode, paramMap, fakeImage )
 									{
 										loadValue.apply( this, arguments );
@@ -550,24 +558,29 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 								{
 									id : 'align',
 									type : 'select',
-									label : editor.lang.flash.align,
+									label : editor.lang.common.align,
 									'default' : '',
 									style : 'width : 100%;',
 									items :
 									[
 										[ editor.lang.common.notSet , ''],
-										[ editor.lang.image.alignLeft , 'left'],
-										[ editor.lang.image.alignAbsBottom , 'absBottom'],
-										[ editor.lang.image.alignAbsMiddle , 'absMiddle'],
-										[ editor.lang.image.alignBaseline , 'baseline'],
-										[ editor.lang.image.alignBottom , 'bottom'],
-										[ editor.lang.image.alignMiddle , 'middle'],
-										[ editor.lang.image.alignRight , 'right'],
-										[ editor.lang.image.alignTextTop , 'textTop'],
-										[ editor.lang.image.alignTop , 'top']
+										[ editor.lang.common.alignLeft , 'left'],
+										[ editor.lang.flash.alignAbsBottom , 'absBottom'],
+										[ editor.lang.flash.alignAbsMiddle , 'absMiddle'],
+										[ editor.lang.flash.alignBaseline , 'baseline'],
+										[ editor.lang.common.alignBottom , 'bottom'],
+										[ editor.lang.common.alignMiddle , 'middle'],
+										[ editor.lang.common.alignRight , 'right'],
+										[ editor.lang.flash.alignTextTop , 'textTop'],
+										[ editor.lang.common.alignTop , 'top']
 									],
 									setup : loadValue,
-									commit : commitValue
+									commit : function( objectNode, embedNode, paramMap, extraStyles, extraAttributes )
+									{
+										var value = this.getValue();
+										commitValue.apply( this, arguments );
+										value && ( extraAttributes.align = value );
+									}
 								},
 								{
 									type : 'html',
@@ -576,45 +589,48 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 							]
 						},
 						{
-							type : 'vbox',
-							padding : 0,
+							type : 'fieldset',
+							label : CKEDITOR.tools.htmlEncode( editor.lang.flash.flashvars ),
 							children :
 							[
 								{
-									type : 'html',
-									html : CKEDITOR.tools.htmlEncode( editor.lang.flash.flashvars )
-								},
-								{
-									type : 'checkbox',
-									id : 'menu',
-									label : editor.lang.flash.chkMenu,
-									'default' : true,
-									setup : loadValue,
-									commit : commitValue
-								},
-								{
-									type : 'checkbox',
-									id : 'play',
-									label : editor.lang.flash.chkPlay,
-									'default' : true,
-									setup : loadValue,
-									commit : commitValue
-								},
-								{
-									type : 'checkbox',
-									id : 'loop',
-									label : editor.lang.flash.chkLoop,
-									'default' : true,
-									setup : loadValue,
-									commit : commitValue
-								},
-								{
-									type : 'checkbox',
-									id : 'allowFullScreen',
-									label : editor.lang.flash.chkFull,
-									'default' : true,
-									setup : loadValue,
-									commit : commitValue
+									type : 'vbox',
+									padding : 0,
+									children :
+									[
+										{
+											type : 'checkbox',
+											id : 'menu',
+											label : editor.lang.flash.chkMenu,
+											'default' : true,
+											setup : loadValue,
+											commit : commitValue
+										},
+										{
+											type : 'checkbox',
+											id : 'play',
+											label : editor.lang.flash.chkPlay,
+											'default' : true,
+											setup : loadValue,
+											commit : commitValue
+										},
+										{
+											type : 'checkbox',
+											id : 'loop',
+											label : editor.lang.flash.chkLoop,
+											'default' : true,
+											setup : loadValue,
+											commit : commitValue
+										},
+										{
+											type : 'checkbox',
+											id : 'allowFullScreen',
+											label : editor.lang.flash.chkFull,
+											'default' : true,
+											setup : loadValue,
+											commit : commitValue
+										}
+									]
 								}
 							]
 						}

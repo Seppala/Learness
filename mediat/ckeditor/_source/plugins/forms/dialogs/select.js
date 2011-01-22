@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 CKEDITOR.dialog.add( 'select', function( editor )
@@ -73,7 +73,7 @@ CKEDITOR.dialog.add( 'select', function( editor )
 	function removeAllOptions( combo )
 	{
 		combo = getSelect( combo );
-		while( combo.getChild( 0 ) && combo.getChild( 0 ).remove() )
+		while ( combo.getChild( 0 ) && combo.getChild( 0 ).remove() )
 		{ /*jsl:pass*/ }
 	}
 	// Moves the selected option by a number of steps (also negative).
@@ -160,7 +160,18 @@ CKEDITOR.dialog.add( 'select', function( editor )
 			this.commitContent( element );
 
 			if ( isInsertMode )
+			{
 				editor.insertElement( element );
+				if ( CKEDITOR.env.ie )
+				{
+					var sel = editor.getSelection(),
+						bms = sel.createBookmarks();
+					setTimeout(function()
+					{
+						sel.selectBookmarks( bms );
+					}, 0 );
+				}
+			}
 		},
 		contents : [
 			{
@@ -182,11 +193,11 @@ CKEDITOR.dialog.add( 'select', function( editor )
 						setup : function( name, element )
 						{
 							if ( name == 'clear' )
-								this.setValue( '' );
+								this.setValue( this[ 'default' ] || '' );
 							else if ( name == 'select' )
 							{
 								this.setValue(
-										element.getAttribute( '_cke_saved_name' ) ||
+										element.data( 'cke-saved-name' ) ||
 										element.getAttribute( 'name' ) ||
 										'' );
 							}
@@ -194,10 +205,10 @@ CKEDITOR.dialog.add( 'select', function( editor )
 						commit : function( element )
 						{
 							if ( this.getValue() )
-								element.setAttribute( '_cke_saved_name', this.getValue() );
+								element.data( 'cke-saved-name', this.getValue() );
 							else
 							{
-								element.removeAttribute( '_cke_saved_name' ) ;
+								element.data( 'cke-saved-name', false );
 								element.removeAttribute( 'name' );
 							}
 						}

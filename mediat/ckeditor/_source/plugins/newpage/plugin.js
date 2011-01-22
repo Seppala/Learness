@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -19,13 +19,18 @@ CKEDITOR.plugins.add( 'newpage',
 				exec : function( editor )
 				{
 					var command = this;
-					editor.setData( editor.config.newpage_html, function()
+					editor.setData( editor.config.newpage_html || '', function()
 					{
-						editor.fire( 'afterCommandExec',
+						// Save the undo snapshot after all document changes are affected. (#4889)
+						setTimeout( function ()
 						{
-							name: command.name,
-							command: command
-						} );
+							editor.fire( 'afterCommandExec',
+							{
+								name: command.name,
+								command: command
+							} );
+
+						}, 200 );
 					} );
 					editor.focus();
 				},
@@ -46,4 +51,3 @@ CKEDITOR.plugins.add( 'newpage',
  * @example
  * config.newpage_html = '&lt;p&gt;Type your text here.&lt;/p&gt;';
  */
-CKEDITOR.config.newpage_html = '';

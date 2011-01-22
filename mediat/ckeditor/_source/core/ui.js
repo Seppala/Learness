@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -90,6 +90,8 @@ CKEDITOR.ui.prototype =
 		this._.handlers[ type ] = handler;
 	}
 };
+
+CKEDITOR.event.implementOn( CKEDITOR.ui );
 
 /**
  * (Virtual Class) Do not call this constructor. This class is not really part

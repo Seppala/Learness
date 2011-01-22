@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 CKEDITOR.dialog.add( 'form', function( editor )
@@ -84,17 +84,17 @@ CKEDITOR.dialog.add( 'form', function( editor )
 						accessKey : 'N',
 						setup : function( element )
 						{
-							this.setValue( element.getAttribute( '_cke_saved_name' ) ||
+							this.setValue( element.data( 'cke-saved-name' ) ||
 									element.getAttribute( 'name' ) ||
 									'' );
 						},
 						commit : function( element )
 						{
 							if ( this.getValue() )
-								element.setAttribute( '_cke_saved_name', this.getValue() );
+								element.data( 'cke-saved-name', this.getValue() );
 							else
 							{
-								element.removeAttribute( '_cke_saved_name' );
+								element.data( 'cke-saved-name', false );
 								element.removeAttribute( 'name' );
 							}
 						}
@@ -104,7 +104,7 @@ CKEDITOR.dialog.add( 'form', function( editor )
 						type : 'text',
 						label : editor.lang.form.action,
 						'default' : '',
-						accessKey : 'A'
+						accessKey : 'T'
 					},
 					{
 						type : 'hbox',
@@ -143,17 +143,17 @@ CKEDITOR.dialog.add( 'form', function( editor )
 							{
 								id : 'target',
 								type : 'select',
-								label : editor.lang.form.target,
+								label : editor.lang.common.target,
 								style : 'width:100%',
 								accessKey : 'M',
 								'default' : '',
 								items :
 								[
-									[ editor.lang.form.targetNotSet, '' ],
-									[ editor.lang.form.targetNew, '_blank' ],
-									[ editor.lang.form.targetTop, '_top' ],
-									[ editor.lang.form.targetSelf, '_self' ],
-									[ editor.lang.form.targetParent, '_parent' ]
+									[ editor.lang.common.notSet, '' ],
+									[ editor.lang.common.targetNew, '_blank' ],
+									[ editor.lang.common.targetTop, '_top' ],
+									[ editor.lang.common.targetSelf, '_self' ],
+									[ editor.lang.common.targetParent, '_parent' ]
 								]
 							},
 							{

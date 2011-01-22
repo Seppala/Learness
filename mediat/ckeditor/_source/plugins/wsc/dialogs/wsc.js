@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -23,7 +23,7 @@ CKEDITOR.dialog.add( 'checkspell', function( editor )
 			' style="display:none;color:red;font-size:16px;font-weight:bold;padding-top:160px;text-align:center;z-index:11;">' +
 		'</div><iframe' +
 			' src=""' +
-			' style="width:485px;background-color:#f1f1e3;height:380px"' +
+			' style="width:100%;background-color:#f1f1e3;"' +
 			' frameborder="0"' +
 			' name="' + iframeId + '"' +
 			' id="' + iframeId + '"' +
@@ -84,7 +84,9 @@ CKEDITOR.dialog.add( 'checkspell', function( editor )
 
 		window.doSpell({
 			ctrl : textareaId,
-			lang : LangComparer.getSPLangCode( editor.langCode ),
+
+			lang : editor.config.wsc_lang || LangComparer.getSPLangCode(editor.langCode ),
+			intLang: editor.config.wsc_uiLang || LangComparer.getSPLangCode(editor.langCode ),
 			winType : iframeId,		// If not defined app will run on winpopup.
 
 			// Callback binding section.
@@ -105,7 +107,12 @@ CKEDITOR.dialog.add( 'checkspell', function( editor )
 			iframePath : pluginPath + 'ciframe.html',
 
 			// Styles defining.
-			schemaURI : pluginPath + 'wsc.css'
+			schemaURI : pluginPath + 'wsc.css',
+
+			userDictionaryName: editor.config.wsc_userDictionaryName,
+			customDictionaryName: editor.config.wsc_customDictionaryIds && editor.config.wsc_customDictionaryIds.split(","),
+			domainName: editor.config.wsc_domainName
+
 		});
 
 		// Hide user message console (if application was loaded more then after timeout).
@@ -114,7 +121,7 @@ CKEDITOR.dialog.add( 'checkspell', function( editor )
 	}
 
 	return {
-		title : editor.lang.spellCheck.title,
+		title : editor.config.wsc_dialogTitle || editor.lang.spellCheck.title,
 		minWidth : 485,
 		minHeight : 380,
 		buttons : [ CKEDITOR.dialog.cancelButton ],
@@ -122,6 +129,7 @@ CKEDITOR.dialog.add( 'checkspell', function( editor )
 		{
 			var contentArea = this.getContentElement( 'general', 'content' ).getElement();
 			contentArea.setHtml( pasteArea );
+			contentArea.getChild( 2 ).setStyle( 'height', this._.contentSize.height + 'px' );
 
 			if ( typeof( window.doSpell ) != 'function' )
 			{
@@ -153,17 +161,31 @@ CKEDITOR.dialog.add( 'checkspell', function( editor )
 		contents : [
 			{
 				id : 'general',
-				label : editor.lang.spellCheck.title,
+				label : editor.config.wsc_dialogTitle || editor.lang.spellCheck.title,
 				padding : 0,
 				elements : [
 					{
 						type : 'html',
 						id : 'content',
-						style : 'width:485;height:380px',
-						html : '<div></div>'
+						html : ''
 					}
 				]
 			}
 		]
 	};
+});
+
+// Expand the spell-check frame when dialog resized. (#6829)
+CKEDITOR.dialog.on( 'resize', function( evt )
+{
+	var data = evt.data,
+		dialog = data.dialog;
+
+	if ( dialog._.name == 'checkspell' )
+	{
+		var content = dialog.getContentElement( 'general', 'content' ).getElement(),
+			iframe = content && content.getChild( 2 );
+
+		iframe && iframe.setStyle( 'height', data.height + 'px' );
+	}
 });
