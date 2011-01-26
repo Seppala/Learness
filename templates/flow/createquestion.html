@@ -3,33 +3,18 @@
 {% block p_content %}
 
 
-<p class="p2">{{ url_project.name }}</p>
+<h2>Add question to {{ url_project.name }}</h2>
 <form action="." method = "POST">{% csrf_token %}
-<p>
-<table>
+<table class="form">
 <tr><th>Title:</th><td>{{ form.title}}</td><td></td></tr>
-<tr><th>Explanation:</th>
-
-<td>
-
-{{ form.explanation }}
-
-</td>
-
-{% comment %} This was for the CKeditor {% endcomment %}
-{% comment %} <script type="text/javascript">{% endcomment %}
-{% comment %}	CKEDITOR.replace( "explanation" );{% endcomment %}
-{% comment %}</script>{% endcomment %}
+<tr><th>Explanation:</th><td>{{ form.explanation }}</td>
 <td>
 	<div class="wmd-preview"></div>
 </td>
 </tr>
-
-<tr><th>Tags:</th><td>{{ form.tags }}</td><td></td></tr>
+<tr><td></td><td><input type="submit" value="Add this question"><INPUT type="button" value="Click here to go back" onClick="history.back()"> </td><td></td></tr>
 
 </table>
-<p><input type="submit" value="Submit"></p>
 </form>
-<div class="wmd-preview"></div>
 
 {% endblock %}

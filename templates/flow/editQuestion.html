@@ -2,34 +2,20 @@
 {% load markup %}
 
 {% block pagetitle %}Create new question{% endblock%}
-{% block title %} {{project.name}} {% endblock%}
+{% block title %} Edit question {{project.name}} {% endblock%}
 {% block primary %}
-
-<!--<script type="text/javascript" >
-   $(document).ready(function() {
-      $("#id_explanation").markItUp(mySettings);
-   });
-</script> -->
 
 <form action="." method = "POST">{% csrf_token %}
 <p>
-<table>
+<table class="form">
 <tr><th>Title:</th><td>{{ form.title }}</td></tr>
-<tr><th>Explanation:</th>
-
-<td>
-{{ form.explanation|safe  }}
-</td>
-{% comment %} <script type="text/javascript">{% endcomment %}
-{% comment %}	CKEDITOR.replace( "explanation" );{% endcomment %}
-{% comment %}</script>{% endcomment %}
-
+<tr><th>Explanation:</th><td>
+{{ form.explanation|safe  }}</td>
 </tr>
 
-<tr><th>Tags:</th><td>{{ form.tags }}</td></tr>
+<tr><th></th><td><input type="submit" value="Save your changes"><INPUT type="button" value="Click here to go back" onClick="history.back()"></td></tr>
 
 </table>
-<p><input type="submit" value="Submit"></p>
 </form>
 
 {% endblock %}

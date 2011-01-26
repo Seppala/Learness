@@ -4,16 +4,11 @@
 {% block title %}Define your project{% endblock%}
 {% block primary %}
 <form action="." method = "POST">{% csrf_token %}
-<table>
+<table class= "form">
     <tr><th>Give a name for your project:</th><td>{{ form.name }}</td></tr>
-    <tr><th></th><td></td></tr>
-
-    
-{% comment %} <script type="text/javascript">{% endcomment %}
-{% comment %}	CKEDITOR.replace( "explanation" );{% endcomment %}
-{% comment %}</script>{% endcomment %}
+    <tr><td></td><td><input type="submit" value="Add this project"><INPUT type="button" value="Click here to go back" onClick="history.back()"></td></tr>
 
 </table>
-<p><input type="submit" value="Submit"></p>
+<p></p>
 </form>
 {% endblock %}

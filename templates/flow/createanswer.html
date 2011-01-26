@@ -5,13 +5,6 @@
 {% block pagetitle %}Give answer{% endblock%}
 {% block title %} {{url_question.title}} {% endblock%}
 {% block primary %}
-
-<!-- <script type="text/javascript" >
-   $(document).ready(function() {
-      $("#id_explanation").markItUp(mySettings);
-   });
-</script> -->
-
 <p>
 {{ url_question.explanation|markdown:"safe" }}
 </p>
@@ -20,13 +13,8 @@
     <tr><th colspan=2 align=left>Your Answer:</th><td></td><td></td></tr>
     <tr><th></th><td>{{ form.explanation }}</td><td></td></tr>
     <tr><th>Tags:</th><td>{{ form.tags }}</td><td></td></tr>
-    
-{% comment %} <script type="text/javascript">{% endcomment %}
-{% comment %}	CKEDITOR.replace( "explanation" );{% endcomment %}
-{% comment %}</script>{% endcomment %}
+    <tr><td></td><td><input type="submit" value="Submit answer"><INPUT type="button" value="Click here to go back" onClick="history.back()"></td><td></td></tr>
 
 </table>
-
-<p><input type="submit" value="Submit"></p>
 </form>
 {% endblock %}

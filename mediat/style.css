@@ -10,19 +10,25 @@
 /* 1. GENERAL*/
 
 #project-ul .Qtitle {
-font-family: Arial;
+font-family: 'PT Sans', Arial;
+cursor: pointer;
 }
 
 a {
-font-family: Verdana, arial, serif;
+font-family: arial, serif;
 text-decoration:none;
 
 }
 h1 {
 font-family: 'Josefin Sans Std Light', arial, serif;
 }
-input {
+
+h2 {
 font-family: 'Josefin Sans Std Light', arial, serif;
+}
+input {
+font-family: 'PT Sans', arial, serif;
+font-size: 14px;
 }
 
 ul {
@@ -42,9 +48,11 @@ margin: 0px;
 
     
 
-/* 2. Template
- 
- These are template items that show up on almost every page
+/* 
+ * 
+ *2. TEMPLATE
+ *
+ *  These are template items that show up on almost every page
  */
 
 
@@ -120,11 +128,23 @@ margin: 0px;
 
 }
 
+.addbox {
+    text-decoration:underline;
 
+}
+
+
+.form th {
+    text-align:left;
+    font-family: 'PT Sans', arial;
+    font-weight:normal;
+    vertical-align:top;
+    
+}
 
 /* 
 *
-* 3. Project page 
+* 3. PROJECT PAGE 
 *
 */
 
@@ -195,7 +215,13 @@ margin: 0px;
 
 .yellowblock {
 
-    background: rgb(244,233,30);
+    /*background: rgb(244,233,30);*/
+    font-family: Arial;
+    font-size: 14px;
+    width: 10px;
+    padding-right:15px;
+    text-align: left;
+    vertical-align: top;
 }
 
 #projectlist {
@@ -228,11 +254,17 @@ h1 a.a1 {margin: 0.0px 0.0px 16.0px 0.0px; font: 12px; color: rgb(2,90,191)}
 .Qtitle {
     
     color: rgb(20,20,20);
-    font: Verdana, arial, serif;
+    font: sans-serif, arial, serif;
     font-size: 14px;
 
 }
 
+.Qtitle:hover {
+    
+    color: rgb(80,80,80);
+    text-decoration:underline;
+
+}
 
 .QuestionTitleTD {
 
@@ -270,6 +302,7 @@ padding-bottom: 2px;
 border-style:solid;
 border-width:0px;
 margin-left:15px;
+padding-left: 45px;
 
 }
 
@@ -349,9 +382,6 @@ border-width:0px;
 font-family: Arial;
 }
 
-
-
-/*project-list is for holding the project-Header and project-continer on the first project page which displays the projects.*/
 
 
 /* answerButton is the button that opens the answer div */
@@ -478,7 +508,29 @@ a.btn-slide:hover{
 	color: #b8b8b8;
 }
 
-
+/*
+ *
+ * 4. ADDING PAGES
+ *
+ */
+ 
+ #id_title {
+    rows:2;
+    width: 450px;
+    padding:3px;
+    
+ 
+ }
+ 
+ #id_explanation {
+    width: 450px;
+    cols:30;
+    rows:5;
+    height:50px;
+ 
+ 
+ }
+ 
 
 .action-container a {
     display: block;
@@ -574,6 +626,10 @@ body {
   border-width:0px;
   width: 680px;
 
+}
+
+.content {
+    margin: 20px;
 }
 
 /* Navigation for the upper navigation*/
