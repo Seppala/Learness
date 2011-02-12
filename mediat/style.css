@@ -36,7 +36,7 @@ ul {
 
 }
 
-p {
+body {
 font-family: 'PT Sans', arial, serif;
 margin:0px;
 }
@@ -275,7 +275,7 @@ padding: 0px 0px 0px 0px;
 
 .readable {
 
-    font-family: arial, serif; 
+    font-family: 'Pt Sans', arial, serif; 
     font-size: 14px;
     color: rgb(12,12,12);
 
@@ -351,13 +351,18 @@ padding: 15px 0px 2px 25px;
 /* explanationBlock is the placeholder div for the explanation of the question */
 
 .explanationBlock {
+	
     display: block;
-    text-align: left;
+    font-size: 14px;
+	text-align: left;
     margin-left: 0px;
     padding-top: 5px;
     padding-left: 5px;
     padding-bottom: 5px;
         }
+.explanationBlock p{
+	
+}
         
 #project-ul li{
     

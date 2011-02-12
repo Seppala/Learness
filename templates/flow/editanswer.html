@@ -14,10 +14,7 @@
 		<td>Question Title: </td><td> {{ url_question.title}}</td>
 	</tr>
 	<tr>
-		<td>Explanation: </td><td> {{ url_question.explanation}}</td>
-	</tr>
-	<tr>
-		<td>Answer: </td><td> {{ url_answer.explanation}}</td>
+		<td>Explanation: </td><td> {% autoescape off%}{{ url_question.explanation}} {% endautoescape %}</td>
 	</tr>
 <form action="." method = "POST">{% csrf_token %}
 
@@ -28,4 +25,10 @@
 </table>
 <tr><th>&nbsp;</th><td><input type="submit" value="save your changes"><INPUT type="button" value="Click here to go back" onClick="history.back()"></td></tr>
 </form>
+<script type="text/javascript">
+	CKEDITOR.replace( 'explanation',
+    {
+        toolbar : 'MyToolbar'
+     } );
+</script>
 {% endblock %}

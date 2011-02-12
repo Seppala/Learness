@@ -1,3 +1,4 @@
+from Learness.utils import sanitizeHtml
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list_detail import object_list
@@ -222,11 +223,12 @@ def createQuestion(request, project_id):
 	p = get_object_or_404(Project, pk = project_id, owner = request.user) 
 	if request.method == 'POST': # If the form has been submitted...
 		question = Question(relatedProject = p) # set the relatedProject field which is not included in the form
+		#form = QuestionForm(sanitized, instance = question) # A form bound to the POST data
 		form = QuestionForm(request.POST, instance = question) # A form bound to the POST data
 		
 		if form.is_valid(): # All validation rules pass
 			#title = form.cleaned_data['title']
-			#explanation = form.cleaned_data['explanation']
+			form.cleaned_data['explanation'] = sanitizeHtml(form.cleaned_data['explanation'])
 			#relatedProject = form.cleaned_data['relatedProject']
 			#tags = form.cleaned_data['tags']
 			#new_question = 

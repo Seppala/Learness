@@ -62,7 +62,7 @@
         <tr class="QuestionTitleTR">
         <td>
             <div class="yellowblock">
-                {{forloop.revcounter}}
+                
             </div>
         </td>
         <td class=QuestionTitleTD>
@@ -91,7 +91,9 @@
 		
 	<div class="explanationBlock">
 	<!-- >{{ gotQuestion.explanation|markdown:"safe" }} -->
-            {{ gotQuestion.explanation|markdown:"safe" }}
+    {% autoescape off %}
+            {{ gotQuestion.explanation}}
+    {% endautoescape %}
 	</div>
 	
 	<!--<a class="answerButton">See/Hide Answers </a> -->
@@ -100,9 +102,13 @@
 		{% for answer in gotQuestion.answer_set.all %} 
 	
 		<div class="readable answers">
-
-			{{answer.explanation|markdown:"safe"  }}
-
+        
+             {% autoescape off %}
+             
+			{{answer.explanation}}
+            
+                {% endautoescape %}
+                
 			{% if isCollaborator or isOwner %}
 				<table>
 					<tr>

@@ -7,7 +7,7 @@
 <form action="." method = "POST">{% csrf_token %}
 <table class="form">
 <tr><th>Title:</th><td>{{ form.title}}</td><td></td></tr>
-<tr><th>Explanation:</th><td>{{ form.explanation }}</td>
+<tr><th>Explanation:</th><td>{% autoescape off%}{{ form.explanation }}{% endautoescape %}</td>
 <td>
 	<div class="wmd-preview"></div>
 </td>
@@ -15,6 +15,12 @@
 <tr><td></td><td><input type="submit" value="Add this question"><INPUT type="button" value="Click here to go back" onClick="history.back()"> </td><td></td></tr>
 
 </table>
+<script type="text/javascript">
+	CKEDITOR.replace( 'explanation',
+    {
+        toolbar : 'MyToolbar'
+     } );
+</script>
 </form>
 
 {% endblock %}
