@@ -373,7 +373,7 @@ padding: 15px 0px 2px 25px;
 }
 
 
-/*questionBlock and question-container is the question and project box*/
+/*questionBlock and  is the question and project box*/
 
 #questionBlock {
 
@@ -387,7 +387,12 @@ border-width:0px;
 font-family: Arial;
 }
 
+.question-container {
 
+background-color: rgb(245,245,245);
+margin: 1px;
+
+}
 
 /* answerButton is the button that opens the answer div */
 
